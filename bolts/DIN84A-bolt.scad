@@ -1,6 +1,6 @@
-include <constants.scad>
-include <utils.scad>
-include <basic-bolt.scad>
+include <../constants.scad>
+include <../utils.scad>
+include <../basic-bolt.scad>
 
 // dictionary to convert the shaft diameter to the head params
 DIN84A_DIC = [  [2.0,   [ 3.8,  1.2]],
