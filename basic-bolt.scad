@@ -80,7 +80,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     _hdc = hd + 2*clearance;  
     _sdc = sd + 2*clearance;
 
-    _tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
+    _tf = deez_nuts_align_to_transform(sh=_sh, hh=_hh, align=align);
         
     // adding custom bolt
     translate(add_vecs([0,0,0],_tf))
@@ -90,7 +90,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     // adding head access hole
     _h_eps = min(eps, hh_off);
     _hh_off = hh_off + _h_eps;
-    translate(add_vecs([0,0,hh+sh+_h_eps],_tf))
+    translate(add_vecs([0,0,_hh+_sh+_h_eps],_tf))
         cylinderpp(h=_hh_off, d=_hdc, align="z");
 
     // adding shaft access hole
