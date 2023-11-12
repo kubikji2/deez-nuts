@@ -68,4 +68,34 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
                         clearance=0.1, eps=dn_eps)
 {
 
+    // check number of required arguments
+    assert( __deez_nuts__count_undef_in_list([hh, sh, th]) == 1,
+            str("[DEEZ-NUTS:basic-bolt-hole] define exactly two variables from {sh=", sh ,", sd=", sd,", th=", th,"}"));
+
+    // define sh and hh to get _tf
+    _sh = is_undef(sh) ? th-hh : sh;
+    _hh = is_undef(hh) ? th-sh : hh;
+    
+    // define hd and sd
+    _hdc = hd + clearance;  
+    _sdc = sd + clearance;
+
+    _tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
+        
+    // adding custom bolt
+    translate(add_vecs([0,0,0],_tf))
+        basic_bolt( hh=_hh+clearance, hd=_hdc, sh=_sh-clearance, sd=_sdc,
+                    align=DN_BOTTOM, is_sloped=is_sloped);
+
+    // adding head access hole
+    _h_eps = min(eps, hh_off);
+    _hh_off = hh_off + _h_eps;
+    translate(add_vecs([0,0,hh+sh+_h_eps],_tf))
+        cylinderpp(h=_hh_off, d=_hdc, align="z");
+
+    // adding shaft access hole
+    _s_eps = min(eps, sh_off);
+    translate(add_vecs([0,0,_s_eps],_tf))
+        cylinderpp(h=sh_off + _s_eps, d=_sdc, align="Z"); 
+
 }
