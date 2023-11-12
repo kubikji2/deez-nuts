@@ -46,7 +46,7 @@ function float(s, num=0, cnt=0, d_cnt=0) =
 
 
 // parser for bolt descriptor
-function deez_nuts_parse_bolt_descriptor(s) = 
+function deez_nuts_parse_descriptor(s) = 
     let(
         x_idx = search("x",s)[0],
         size = float(chr([for (i=[1:x_idx-1]) ord(s[i])])),

@@ -14,14 +14,12 @@ LUXPZ_DIC = [   [3.0,   [ 5.8,  2.2]],
 
 
 // LUXPZ screw
-module LUXPZ_screw(bolt_descriptor, align)
+module LUXPZ_screw(descriptor, align)
 {
     // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_bolt_descriptor(bolt_descriptor);
+    _parsed_data = deez_nuts_parse_descriptor(descriptor);
     sd = _parsed_data[0];
     th = _parsed_data[1];
-
-    echo(sd);
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
@@ -35,16 +33,14 @@ module LUXPZ_screw(bolt_descriptor, align)
 
 
 // LUXPZ screw hole
-module LUXPZ_screw_hole(bolt_descriptor, align,
+module LUXPZ_screw_hole(descriptor, align,
                         sh_off=0, hh_off=0,
                         clearance=0.1, eps=dn_eps)
 {
     // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_bolt_descriptor(bolt_descriptor);
+    _parsed_data = deez_nuts_parse_descriptor(descriptor);
     sd = _parsed_data[0];
     th = _parsed_data[1];
-
-    echo(sd);
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
