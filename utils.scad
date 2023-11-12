@@ -53,3 +53,15 @@ function deez_nuts_parse_bolt_descriptor(s) =
         length = float(chr([for (i=[x_idx+1:len(s)-1]) ord(s[i])]))
         )
     [size, length, s[0] == "M"];
+
+
+
+// find a variable in the dictionary
+// '-> return data if 'key' is present in dictionary, 'undef' if key is not present in 'dic'
+function deez_nuts_find_in_dic(key, dic, cnt=0, data=undef) =
+    cnt == len(dic) ?
+        data :
+        let (data = (key == dic[cnt][0]) ?
+                dic[cnt][1] :
+                data)
+            deez_nuts_find_in_dic(key=key, dic=dic, cnt=cnt+1, data=data);
