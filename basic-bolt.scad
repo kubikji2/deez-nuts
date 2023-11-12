@@ -18,7 +18,9 @@ include <utils.scad>
 //     '-> DN_MIDDLE for aligning to the head bottom (shaft top)
 //     '-> DN_BOTTOM for aligning to the shaft bottom
 // '-> argument 'is_sloped' defines whether the head is sloped
-module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOTTOM, is_sloped=false)
+// '-> argument 'head_fn' defines the fn for the head
+module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
+                    align=DN_BOTTOM, is_sloped=false, head_fn=$fn)
 {
     
     // check number of required arguments
@@ -43,7 +45,7 @@ module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOT
         _hd1 = is_sloped ? sd : hd;
         _hd2 = is_sloped ? hd : hd;
         translate([0,0,_sh])
-            cylinderpp(d1=_hd1, d2=_hd2, h=_hh, align="z"); 
+            cylinderpp(d1=_hd1, d2=_hd2, h=_hh, align="z", $fn=head_fn); 
     } 
 }
 
@@ -63,9 +65,10 @@ module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOT
 // '-> argument 'hh_off' defines offset from the head top further up
 // '-> argument 'clearance' defines clearance for both head and shaft
 // '-> argument 'eps' defines epsilon
+// '-> argument 'head_fn' defines the fn for the head
 module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
                         align=DN_BOTTOM, is_sloped=false, sh_off=0, hh_off=0,
-                        clearance=0.1, eps=dn_eps)
+                        clearance=0.1, eps=dn_eps, head_fn=$fn)
 {
 
     // check number of required arguments
@@ -85,13 +88,13 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     // adding custom bolt
     translate(add_vecs([0,0,0],_tf))
         basic_bolt( hh=_hh+clearance, hd=_hdc, sh=_sh-clearance, sd=_sdc,
-                    align=DN_BOTTOM, is_sloped=is_sloped);
+                    align=DN_BOTTOM, is_sloped=is_sloped, head_fn=head_fn);
 
     // adding head access hole
     _h_eps = min(eps, hh_off);
     _hh_off = hh_off + _h_eps;
     translate(add_vecs([0,0,_hh+_sh+_h_eps],_tf))
-        cylinderpp(h=_hh_off, d=_hdc, align="z");
+        cylinderpp(h=_hh_off, d=_hdc, align="z", $fn=head_fn);
 
     // adding shaft access hole
     _s_eps = min(eps, sh_off);
