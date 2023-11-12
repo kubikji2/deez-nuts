@@ -20,7 +20,31 @@ include <utils.scad>
 // '-> argument 'is_sloped' defines whether the head is sloped
 module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOTTOM, is_sloped=false)
 {
+    
+    // check number of required arguments
+    assert( __deez_nuts__count_undef_in_list([hh, sh, th]) == 1,
+            str("[DEEZ-NUTS:basic-bolt] define exactly two variables from {sh=", sh ,", sd=", sd,", th=", th,"}"));
 
+    // define sh and hh
+    _sh = is_undef(sh) ? th-hh : sh;
+    _hh = is_undef(hh) ? th-sh : hh;
+
+    // compute transforms
+    _tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
+    _eps = min(dn_eps, hh);
+
+    // construct model
+    translate(_tf)
+    {
+        // shaft
+        cylinderpp(d=sd, h=sh+_eps, align="z");
+        
+        // head
+        _hd1 = is_sloped ? sd : hd;
+        _hd2 = is_sloped ? hd : hd;
+        translate([0,0,sh])
+            cylinderpp(d1=_hd1, d2=_hd2, h=hh, align="z"); 
+    } 
 }
 
 
