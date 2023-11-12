@@ -30,20 +30,20 @@ module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOT
     _hh = is_undef(hh) ? th-sh : hh;
 
     // compute transforms
-    _tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
-    _eps = min(dn_eps, hh);
+    _tf = deez_nuts_align_to_transform(sh=_sh, hh=_hh, align=align);
+    _eps = min(dn_eps, _hh);
 
     // construct model
     translate(_tf)
     {
         // shaft
-        cylinderpp(d=sd, h=sh+_eps, align="z");
+        cylinderpp(d=sd, h=_sh+_eps, align="z");
         
         // head
         _hd1 = is_sloped ? sd : hd;
         _hd2 = is_sloped ? hd : hd;
-        translate([0,0,sh])
-            cylinderpp(d1=_hd1, d2=_hd2, h=hh, align="z"); 
+        translate([0,0,_sh])
+            cylinderpp(d1=_hd1, d2=_hd2, h=_hh, align="z"); 
     } 
 }
 
