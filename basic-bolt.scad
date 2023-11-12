@@ -77,8 +77,8 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     _hh = is_undef(hh) ? th-sh : hh;
     
     // define hd and sd
-    _hdc = hd + clearance;  
-    _sdc = sd + clearance;
+    _hdc = hd + 2*clearance;  
+    _sdc = sd + 2*clearance;
 
     _tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
         
