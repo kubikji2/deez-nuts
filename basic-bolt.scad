@@ -7,7 +7,7 @@ include <constants.scad>
 include <utils.scad>
 
 
-// custom screw module
+// basic bolt module
 // '-> argument 'hh' defines head height
 // '-> argument 'hd' defines head diameter
 // '-> argument 'sh' defines shaft height
@@ -48,7 +48,7 @@ module basic_bolt(hh=undef, hd=undef, sh=undef, sd=undef, th=undef, align=DN_BOT
 }
 
 
-// custom screw hole
+// basic bolt hole
 // '-> argument 'hh' defines head height
 // '-> argument 'hd' defines head diameter
 // '-> argument 'sh' defines shaft height
