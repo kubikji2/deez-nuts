@@ -9,7 +9,7 @@ include<nuts/DIN985-nut.scad>
 
 
 // parse avaliable nuts
-module nut(d, standard, align=DN_BOTTOM)
+module nut(d, standard, align=DN_ALIGN_BOTTOM)
 {
     if (standard=="DIN439")
     {
@@ -35,7 +35,7 @@ module nut(d, standard, align=DN_BOTTOM)
 
 
 // parse avaliable nuts
-module nut_hole(d, standard, align=DN_BOTTOM, s_off=0,
+module nut_hole(d, standard, align=DN_ALIGN_BOTTOM, s_off=0,
                 h_off=0, clearance=0.1, eps=DN_EPS)
 {
     if (standard=="DIN439")

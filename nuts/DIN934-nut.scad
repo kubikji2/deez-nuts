@@ -13,7 +13,7 @@ DIN934_DIC = [  [2.0,   [ 4.0,  1.5]],
 
 
 // DIN934 nut
-module DIN934_nut(d, align=DN_BOTTOM)
+module DIN934_nut(d, align=DN_ALIGN_BOTTOM)
 {
 
     // parserd dic data
@@ -27,7 +27,7 @@ module DIN934_nut(d, align=DN_BOTTOM)
 
 
 // DIN934 nut hole
-module DIN934_nut_hole( d, align=DN_BOTTOM, s_off=0,
+module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 

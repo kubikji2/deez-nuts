@@ -6,7 +6,7 @@ include<bolts/DIN933-bolt.scad>
 
 
 // parse avaliable bolts
-module bolt(descriptor, standard, align=DN_BOTTOM)
+module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM)
 {
     if (standard=="DIN84A")
     {
@@ -24,7 +24,7 @@ module bolt(descriptor, standard, align=DN_BOTTOM)
 
 
 // parse avaliable bolts
-module bolt_hole(   descriptor, standard, align=DN_BOTTOM,
+module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
                     sh_off=0, hh_off=0,
                     clearance=0.1, eps=DN_EPS)
 {

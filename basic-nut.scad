@@ -12,7 +12,7 @@ include <utils.scad>
 // '-> argument 'D' is outer (corner-to-coren) diameter
 // '-> argument 'h' is nut height
 // '-> argument 'align' is nut alignment
-module basic_nut(d=undef, D=undef, h=undef, align=DN_BOTTOM)
+module basic_nut(d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM)
 {
 
     assert( __deez_nuts__count_undef_in_list([d, D]) == 1,
@@ -20,9 +20,9 @@ module basic_nut(d=undef, D=undef, h=undef, align=DN_BOTTOM)
     
     _D = is_undef(D) ? d/sin(60) : D;
 
-    _align = (align==DN_BOTTOM) ? 
+    _align = (align==DN_ALIGN_BOTTOM) ? 
                 "z" :
-                (align==DN_TOP) ?
+                (align==DN_ALIGN_TOP) ?
                     "Z" : "";
 
     cylinderpp(d=_D, h=h, align=_align, $fn=6);
@@ -39,7 +39,7 @@ module basic_nut(d=undef, D=undef, h=undef, align=DN_BOTTOM)
 // '-> argument 's_off' defines the nut horizontal access hole length
 // '-> argument 'clearance' defines clearance
 // '-> argument 'eps' defines epsilon
-module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_BOTTOM,
+module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM,
                         h_off=0, s_off=0, clearance=0.1, eps=DN_EPS)
 {
 
@@ -49,9 +49,9 @@ module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_BOTTOM,
     _D = is_undef(D) ? d/sin(60) + 2*clearance : D + 2*clearance;
     _h = h + 2*clearance;
 
-    _data = (align==DN_BOTTOM) ? 
+    _data = (align==DN_ALIGN_BOTTOM) ? 
                 [-clearance, 0] :
-                (align==DN_TOP) ?
+                (align==DN_ALIGN_TOP) ?
                     [clearance, -h] :
                     [0, -h/2];
     

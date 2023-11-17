@@ -15,7 +15,7 @@ DIN562_DIC = [  [3.0,   [ 5.4,  1.8]],
 
 
 // DIN562 nut
-module DIN562_nut(d, align=DN_BOTTOM)
+module DIN562_nut(d, align=DN_ALIGN_BOTTOM)
 {
 
     // parserd dic data
@@ -23,9 +23,9 @@ module DIN562_nut(d, align=DN_BOTTOM)
     hd = _dic_data[0];
     hh = _dic_data[1];
 
-    _align = (align==DN_BOTTOM) ? 
+    _align = (align==DN_ALIGN_BOTTOM) ? 
                 "z" :
-                (align==DN_TOP) ?
+                (align==DN_ALIGN_TOP) ?
                     "Z" : "";
 
     // construct model
@@ -34,7 +34,7 @@ module DIN562_nut(d, align=DN_BOTTOM)
 
 
 // DIN562 nut hole
-module DIN562_nut_hole( d, align=DN_BOTTOM, s_off=0,
+module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 
@@ -50,9 +50,9 @@ module DIN562_nut_hole( d, align=DN_BOTTOM, s_off=0,
     _d = hd + 2*clearance;
     _h = hh + 2*clearance;
 
-    _data = (align==DN_BOTTOM) ? 
+    _data = (align==DN_ALIGN_BOTTOM) ? 
                 [-clearance, 0, "z"] :
-                (align==DN_TOP) ?
+                (align==DN_ALIGN_TOP) ?
                     [clearance, -hh, "Z"] :
                     [0, -hh/2, ""];
     

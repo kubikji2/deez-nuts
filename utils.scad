@@ -3,11 +3,11 @@ include <constants.scad>
 
 // retun tranform for particular align
 function deez_nuts_align_to_transform(sh, hh, align) = 
-    align == DN_BOTTOM ? 
+    align == DN_ALIGN_BOTTOM ? 
         [0, 0, 0] :
-        align == DN_MIDDLE ?
+        align == DN_ALIGN_MIDDLE ?
             [0, 0, -sh] :
-            align == DN_TOP ?
+            align == DN_ALIGN_TOP ?
                 [0, 0, -sh-hh] :
                 undef;
 

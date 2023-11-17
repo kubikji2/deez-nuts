@@ -11,7 +11,7 @@ DIN985_DIC = [  [3.0,   [ 5.4,  3.9]],
 //                        '-> head diameter
 
 // DIN985 nut
-module DIN985_nut(d, align=DN_BOTTOM)
+module DIN985_nut(d, align=DN_ALIGN_BOTTOM)
 {
 
     // parserd dic data
@@ -25,7 +25,7 @@ module DIN985_nut(d, align=DN_BOTTOM)
 
 
 // DIN985 nut hole
-module DIN985_nut_hole( d, align=DN_BOTTOM, s_off=0,
+module DIN985_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 

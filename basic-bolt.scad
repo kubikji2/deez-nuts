@@ -14,13 +14,13 @@ include <utils.scad>
 // '-> argument 'sd' defines shaft diameter
 // '-> argument 'th' defines total height 
 // '-> argument 'align' defines alignemnent with expected values
-//     '-> DN_TOP for aligning to the head top
-//     '-> DN_MIDDLE for aligning to the head bottom (shaft top)
-//     '-> DN_BOTTOM for aligning to the shaft bottom
+//     '-> DN_ALIGN_TOP for aligning to the head top
+//     '-> DN_ALIGN_MIDDLE for aligning to the head bottom (shaft top)
+//     '-> DN_ALIGN_BOTTOM for aligning to the shaft bottom
 // '-> argument 'is_sloped' defines whether the head is sloped
 // '-> argument 'head_fn' defines the fn for the head
 module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
-                    align=DN_BOTTOM, is_sloped=false, head_fn=$fn)
+                    align=DN_ALIGN_BOTTOM, is_sloped=false, head_fn=$fn)
 {
     
     // check number of required arguments
@@ -57,9 +57,9 @@ module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 // '-> argument 'sd' defines shaft diameter
 // '-> argument 'th' defines total height 
 // '-> argument 'align' defines alignemnent with expected values
-//     '-> DN_TOP for aligning to the head top
-//     '-> DN_MIDDLE for aligning to the head bottom (shaft top)
-//     '-> DN_BOTTOM for aligning to the shaft bottom
+//     '-> DN_ALIGN_TOP for aligning to the head top
+//     '-> DN_ALIGN_MIDDLE for aligning to the head bottom (shaft top)
+//     '-> DN_ALIGN_BOTTOM for aligning to the shaft bottom
 // '-> argument 'is_sloped' defines whether the head is sloped
 // '-> argument 'sh_off' defines offset from the shaft bottom further down
 // '-> argument 'hh_off' defines offset from the head top further up
@@ -67,7 +67,7 @@ module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 // '-> argument 'eps' defines epsilon
 // '-> argument 'head_fn' defines the fn for the head
 module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
-                        align=DN_BOTTOM, is_sloped=false, sh_off=0, hh_off=0,
+                        align=DN_ALIGN_BOTTOM, is_sloped=false, sh_off=0, hh_off=0,
                         clearance=0.1, eps=DN_EPS, head_fn=$fn)
 {
 
@@ -88,7 +88,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     // adding custom bolt
     translate(add_vecs([0,0,0],_tf))
         basic_bolt( hh=_hh+clearance, hd=_hdc, sh=_sh-clearance, sd=_sdc,
-                    align=DN_BOTTOM, is_sloped=is_sloped, head_fn=head_fn);
+                    align=DN_ALIGN_BOTTOM, is_sloped=is_sloped, head_fn=head_fn);
 
     // adding head access hole
     _h_eps = min(eps, hh_off);

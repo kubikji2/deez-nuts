@@ -12,7 +12,7 @@ DIN439_DIC = [  [3.0,   [ 5.4,  1.8]],
 
 
 // DIN439 nut
-module DIN439_nut(d, align=DN_BOTTOM)
+module DIN439_nut(d, align=DN_ALIGN_BOTTOM)
 {
 
     // parserd dic data
@@ -26,7 +26,7 @@ module DIN439_nut(d, align=DN_BOTTOM)
 
 
 // DIN439 nut hole
-module DIN439_nut_hole( d, align=DN_BOTTOM, s_off=0,
+module DIN439_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 

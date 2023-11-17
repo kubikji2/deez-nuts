@@ -6,7 +6,7 @@ include<screws/LUXPZ-screw.scad>
 
 
 // parse avaliable screws
-module screw(descriptor, standard, align=DN_BOTTOM)
+module screw(descriptor, standard, align=DN_ALIGN_BOTTOM)
 {
     if (standard=="LUXPZ")
     {
@@ -20,7 +20,7 @@ module screw(descriptor, standard, align=DN_BOTTOM)
 
 
 // parse avaliable screws
-module screw_hole(  descriptor, standard, align=DN_BOTTOM,
+module screw_hole(  descriptor, standard, align=DN_ALIGN_BOTTOM,
                     sh_off=0, hh_off=0,
                     clearance=0.1, eps=DN_EPS)
 {
