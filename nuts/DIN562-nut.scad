@@ -51,13 +51,13 @@ module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
 
     _d = hd + 2*clearance;
-    _h = h + 2*_h_clearance;
+    _h = hh + 2*_h_clearance;
 
     _data = (align==DN_ALIGN_BOTTOM) ? 
-                [-_h_clearance, 0] :
+                [-_h_clearance, 0, "z"] :
                 (align==DN_ALIGN_TOP) ?
-                    [_h_clearance, -h] :
-                    [0, -h/2];
+                    [_h_clearance, -hh, "Z"] :
+                    [0, -hh/2, ""];
     
     _nut_tf = [0,0,_data[0]];
     _hole_tf = [0,0,_data[1]];
@@ -82,6 +82,6 @@ module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
     // add hole
     translate(_hole_tf)
-        cubepp([_d, _d, _h+h_off], align="Z"); 
+        cubepp([_d, _d, _h+h_off], align="z"); 
 
 }
