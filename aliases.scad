@@ -1,0 +1,12 @@
+// STANDARD costants
+// nuts constants
+REGULAR_NUT = "DIN934";
+SQUARE_NUT = "DIN562";
+NYLOCK_NUT = "DIN985";
+THIN_NUT = "DIN439";
+
+// screws and bolts constants
+PHILLIPS_SCREW = "LUXPZ";
+SLOTTED_HEAD_BOLT = "DIN84A";
+HEX_HEAD_BOLT = "DIN933";
+
