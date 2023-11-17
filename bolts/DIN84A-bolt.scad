@@ -37,8 +37,6 @@ module DIN84A_bolt_hole(descriptor, align,
     sd = _parsed_data[0];
     sh = _parsed_data[1];
 
-    echo(sd);
-
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=DIN84A_DIC);
     hd = _dic_data[0];
