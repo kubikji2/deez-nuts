@@ -35,7 +35,7 @@ module DIN562_nut(d, align=DN_BOTTOM)
 
 // DIN562 nut hole
 module DIN562_nut_hole( d, align=DN_BOTTOM,
-                        h_off=0, clearance=0.1, eps=dn_eps)
+                        h_off=0, clearance=0.1, eps=DN_EPS)
 {
 
     // parserd dic data
