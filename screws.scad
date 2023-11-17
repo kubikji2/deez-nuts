@@ -14,7 +14,7 @@ module screw(descriptor, standard, align=DN_BOTTOM)
     }
     else
     {
-        assert(false, "[SCREW] standard: ", standard, " is not implemented!");
+        assert(false, str("[SCREW] standard: ", standard, " is not implemented!"));
     }
 }
 
@@ -32,6 +32,6 @@ module screw_hole(  descriptor, standard, align=DN_BOTTOM,
     }
     else
     {
-        assert(false, "[SCREW-HOLE] standard: ", standard, " is not implemented!");
+        assert(false, str("[SCREW-HOLE] standard: ", standard, " is not implemented!"));
     }
 }
