@@ -27,8 +27,8 @@ module DIN934_nut(d, align=DN_ALIGN_BOTTOM)
 
 
 // DIN934 nut hole
-module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
-                        h_off=0, clearance=0.1, eps=DN_EPS)
+module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0, 
+                        h_off=0, clearance=0.1, h_clearance=undef)
 {
 
     // parserd dic data
@@ -37,8 +37,9 @@ module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
     hh = _dic_data[1];
 
     // construct model
-    basic_nut_hole( d=hd, h=hh, align=align, eps=eps,
+    basic_nut_hole( d=hd, h=hh, align=align,
                     h_off=h_off, s_off=s_off,
-                    clearance=clearance);
+                    clearance=clearance,
+                    h_clearance=h_clearance);
 
 }
