@@ -33,7 +33,7 @@ module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 
     // compute transforms
     _tf = deez_nuts_align_to_transform(sh=_sh, hh=_hh, align=align);
-    _eps = min(dn_eps, _hh);
+    _eps = min(DN_EPS, _hh);
 
     // construct model
     translate(_tf)
@@ -68,7 +68,7 @@ module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 // '-> argument 'head_fn' defines the fn for the head
 module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
                         align=DN_BOTTOM, is_sloped=false, sh_off=0, hh_off=0,
-                        clearance=0.1, eps=dn_eps, head_fn=$fn)
+                        clearance=0.1, eps=DN_EPS, head_fn=$fn)
 {
 
     // check number of required arguments
