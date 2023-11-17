@@ -64,20 +64,20 @@ module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
     _align = _data[2];
    
     // basic shape
-    translate(_nut_tf) 
+    translate(_hole_tf) 
     if (s_off != 0)
     {
         // if there is non-zero s_off, add side hole
         hull()
         {
-            cubepp([_d, _d, _h], align=_align);
+            cubepp([_d, _d, _h], align="z");
             translate([s_off,0,0])
-                cubepp([_d, _d, _h], align=_align);
+                cubepp([_d, _d, _h], align="z");
         }
     }
     else
     { 
-        cubepp([_d, _d, _h], align=_align);
+        cubepp([_d, _d, _h], align="z");
     }
 
     // add hole
