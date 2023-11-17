@@ -32,3 +32,34 @@ module nut(d, standard, align=DN_BOTTOM)
         assert(false, "[NUT] standard: ", standard, " is not implemented!");
     }
 }
+
+
+// parse avaliable nuts
+module nut_hole(d, standard, align=DN_BOTTOM,
+                h_off=0, clearance=0.1, eps=DN_EPS)
+{
+    if (standard=="DIN439")
+    {
+        DIN439_nut_hole(d=d, align=align, eps=eps,
+                        h_off=h_off, clearance=clearance,);
+    }
+    else if (standard=="DIN562")
+    {
+        DIN562_nut_hole(d=d, align=align, eps=eps,
+                        h_off=h_off, clearance=clearance,);
+    }
+    else if (standard=="DIN934")
+    {
+        DIN934_nut_hole(d=d, align=align, eps=eps,
+                        h_off=h_off, clearance=clearance,);
+    }
+    else if (standard=="DIN985")
+    {
+        DIN985_nut_hole(d=d, align=align, eps=eps,
+                        h_off=h_off, clearance=clearance,);
+    }
+    else
+    {
+        assert(false, "[NUT-HOLE] standard: ", standard, " is not implemented!");
+    }
+}
