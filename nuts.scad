@@ -29,34 +29,34 @@ module nut(d, standard, align=DN_BOTTOM)
     }
     else
     {
-        assert(false, "[NUT] standard: ", standard, " is not implemented!");
+        assert(false, str("[NUT] standard: ", standard, " is not implemented!"));
     }
 }
 
 
 // parse avaliable nuts
-module nut_hole(d, standard, align=DN_BOTTOM,
+module nut_hole(d, standard, align=DN_BOTTOM, s_off=0,
                 h_off=0, clearance=0.1, eps=DN_EPS)
 {
     if (standard=="DIN439")
     {
-        DIN439_nut_hole(d=d, align=align, eps=eps,
-                        h_off=h_off, clearance=clearance,);
+        DIN439_nut_hole(d=d, align=align, eps=eps, s_off=s_off,
+                        h_off=h_off, clearance=clearance);
     }
     else if (standard=="DIN562")
     {
-        DIN562_nut_hole(d=d, align=align, eps=eps,
-                        h_off=h_off, clearance=clearance,);
+        DIN562_nut_hole(d=d, align=align, eps=eps, s_off=s_off,
+                        h_off=h_off, clearance=clearance);
     }
     else if (standard=="DIN934")
     {
-        DIN934_nut_hole(d=d, align=align, eps=eps,
-                        h_off=h_off, clearance=clearance,);
+        DIN934_nut_hole(d=d, align=align, eps=eps, s_off=s_off,
+                        h_off=h_off, clearance=clearance);
     }
     else if (standard=="DIN985")
     {
-        DIN985_nut_hole(d=d, align=align, eps=eps,
-                        h_off=h_off, clearance=clearance,);
+        DIN985_nut_hole(d=d, align=align, eps=eps, s_off=s_off,
+                        h_off=h_off, clearance=clearance);
     }
     else
     {
