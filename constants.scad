@@ -1,5 +1,5 @@
 // eps
-dn_eps = 0.001;
+DN_EPS = 0.001;
 
 // ALIGNMENT constants
 DN_TOP = "t";

@@ -29,7 +29,7 @@ module DIN933_bolt(descriptor, align)
 // DIN933 bolt hole
 module DIN933_bolt_hole(descriptor, align,
                         sh_off=0, hh_off=0,
-                        clearance=0.1, eps=dn_eps)
+                        clearance=0.1, eps=DN_EPS)
 {
     // parse bolt descriptor
     _parsed_data = deez_nuts_parse_descriptor(descriptor);
