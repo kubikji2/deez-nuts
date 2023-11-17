@@ -39,7 +39,7 @@ module basic_nut(d=undef, D=undef, h=undef, align=DN_BOTTOM)
 // '-> argument 'clearance' defines clearance
 // '-> argument 'eps' defines epsilon
 module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_BOTTOM,
-                        h_off=0, clearance=0.1, eps=dn_eps)
+                        h_off=0, clearance=0.1, eps=DN_EPS)
 {
 
     assert( __deez_nuts__count_undef_in_list([d, D]) == 1,
