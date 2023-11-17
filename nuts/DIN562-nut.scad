@@ -34,7 +34,7 @@ module DIN562_nut(d, align=DN_BOTTOM)
 
 
 // DIN562 nut hole
-module DIN562_nut_hole( d, align=DN_BOTTOM,
+module DIN562_nut_hole( d, align=DN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 
@@ -62,8 +62,21 @@ module DIN562_nut_hole( d, align=DN_BOTTOM,
    
     // basic shape
     translate(_nut_tf) 
+    if (s_off != 0)
+    {
+        // if there is non-zero s_off, add side hole
+        hull()
+        {
+            cubepp([_d, _d, _h], align=_align);
+            translate([s_off,0,0])
+                cubepp([_d, _d, _h], align=_align);
+        }
+    }
+    else
+    { 
         cubepp([_d, _d, _h], align=_align);
-    
+    }
+
     // add hole
     translate(_hole_tf)
         cubepp([_d, _d, _h+h_off], align="Z"); 

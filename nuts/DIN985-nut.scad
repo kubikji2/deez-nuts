@@ -25,7 +25,7 @@ module DIN985_nut(d, align=DN_BOTTOM)
 
 
 // DIN985 nut hole
-module DIN985_nut_hole( d, align=DN_BOTTOM,
+module DIN985_nut_hole( d, align=DN_BOTTOM, s_off=0,
                         h_off=0, clearance=0.1, eps=DN_EPS)
 {
 
@@ -36,6 +36,7 @@ module DIN985_nut_hole( d, align=DN_BOTTOM,
 
     // construct model
     basic_nut_hole( d=hd, h=hh, align=align, eps=eps,
-                    h_off=h_off, clearance=clearance);
+                    h_off=h_off, s_off=s_off,
+                    clearance=clearance);
 
 }
