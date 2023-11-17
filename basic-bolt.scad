@@ -86,8 +86,8 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     _tf = deez_nuts_align_to_transform(sh=_sh, hh=_hh, align=align);
         
     // adding custom bolt
-    translate(add_vecs([0,0,0],_tf))
-        basic_bolt( hh=_hh+clearance, hd=_hdc, sh=_sh-clearance, sd=_sdc,
+    translate(add_vecs([0,0,-clearance],_tf))
+        basic_bolt( hh=_hh+2*clearance, hd=_hdc, sh=_sh, sd=_sdc,
                     align=DN_ALIGN_BOTTOM, is_sloped=is_sloped, head_fn=head_fn);
 
     // adding head access hole
