@@ -17,3 +17,5 @@ include <bolts.scad>
 // include screws
 include <screws.scad>
 
+// inlcude aliases
+include <aliases.scad>
