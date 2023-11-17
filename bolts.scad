@@ -18,7 +18,7 @@ module bolt(descriptor, standard, align=DN_BOTTOM)
     }
     else
     {
-        assert(false, "[BOLT] standard: ", standard, " is not implemented!");
+        assert(false, str("[BOLT] standard: ", standard, " is not implemented!"));
     }
 }
 
@@ -42,7 +42,7 @@ module bolt_hole(   descriptor, standard, align=DN_BOTTOM,
     }
     else
     {
-        assert(false, "[BOLT-HOLE] standard: ", standard, " is not implemented!");
+        assert(false, str("[BOLT-HOLE] standard: ", standard, " is not implemented!"));
     }
 }
 
