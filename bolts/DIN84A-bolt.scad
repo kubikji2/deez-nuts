@@ -18,6 +18,8 @@ module DIN84A_bolt(descriptor, align)
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=DIN84A_DIC);
+    assert (!is_undef(_dic_data),
+            str("[DEEZ-NUTS:DIN841-bolt] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
     
@@ -39,6 +41,8 @@ module DIN84A_bolt_hole(descriptor, align,
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=DIN84A_DIC);
+    assert (!is_undef(_dic_data),
+            str("[DEEZ-NUTS:DIN841-bolt-hole] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
 

@@ -17,6 +17,8 @@ module DIN439_nut(d, align=DN_ALIGN_BOTTOM)
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=d, dic=DIN439_DIC);
+    assert (!is_undef(_dic_data),
+            str("[DEEZ-NUTS:DIN439-nut] undefined entry for d=", sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
 
@@ -32,6 +34,8 @@ module DIN439_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=d, dic=DIN439_DIC);
+    assert (!is_undef(_dic_data),
+            str("[DEEZ-NUTS:DIN439-nut-hole] undefined entry for d=", sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
 

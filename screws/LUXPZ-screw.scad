@@ -24,7 +24,7 @@ module LUXPZ_screw(descriptor, align)
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
     assert (!is_undef(_dic_data),
-        str("[DEEZ-NUTS:LUXPZ-screw] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
+            str("[DEEZ-NUTS:LUXPZ-screw] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
     
