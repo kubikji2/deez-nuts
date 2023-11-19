@@ -25,7 +25,7 @@ module basic_bolt(  hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     
     // check number of required arguments
     assert( __deez_nuts__count_undef_in_list([hh, sh, th]) == 1,
-            str("[DEEZ-NUTS:basic-bolt] define exactly two variables from {sh=", sh ,", sd=", sd,", th=", th,"}"));
+            str("[DEEZ-NUTS:basic-bolt] define exactly two variables from {hh=", sh ,", sh=", sh,", th=", th,"}"));
 
     // define sh and hh
     _sh = is_undef(sh) ? th-hh : sh;
@@ -73,7 +73,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 
     // check number of required arguments
     assert( __deez_nuts__count_undef_in_list([hh, sh, th]) == 1,
-            str("[DEEZ-NUTS:basic-bolt-hole] define exactly two variables from {sh=", sh ,", sd=", sd,", th=", th,"}"));
+            str("[DEEZ-NUTS:basic-bolt-hole] define exactly two variables from {hh=", hh ,", sh=", sh,", th=", th,"}"));
 
     // define sh and hh to get _tf
     _sh = is_undef(sh) ? th-hh : sh;
