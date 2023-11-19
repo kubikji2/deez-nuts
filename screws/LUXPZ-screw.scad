@@ -2,13 +2,17 @@ include <../constants.scad>
 include <../utils.scad>
 include <../basic-bolt.scad>
 
+// konstant to increase the size, but at this point IDK, IDC
+lxk = 0.25;
 
 // dictionary to convert the shaft diameter to the head params
-LUXPZ_DIC = [   [3.0,   [ 5.9,  2.2]],
-                [3.5,   [ 6.9,  2.2]],
-                [4.0,   [ 7.9,  2.8]],
-                [4.5,   [ 8.9,  3.2]],
-                [6.0,   [11.8,  4.2]]];
+LUXPZ_DIC = [   [2.5,   [ 5.0+lxk,  (( 5.0-2.5)/2)/(tan(45))+lxk]],
+                [3.0,   [ 6.0+lxk,  (( 6.0-3.0)/2)/(tan(45))+lxk]],
+                [3.5,   [ 7.0+lxk,  (( 7.0-3.5)/2)/(tan(45))+lxk]],
+                [4.0,   [ 8.0+lxk,  (( 8.0-4.0)/2)/(tan(45))+lxk]],
+                [4.5,   [ 9.0+lxk,  (( 9.0-4.5)/2)/(tan(45))+lxk]],
+                [5.0,   [10.0+lxk,  ((10.0-5.0)/2)/(tan(45))+lxk]],
+                [6.0,   [12.0+lxk,  ((12.0-6.0)/2)/(tan(45))+lxk]]];
 //                        '     '-> head height 
 //                        '-> head diameter
 
@@ -27,7 +31,7 @@ module LUXPZ_screw(descriptor, align)
             str("[DEEZ-NUTS:LUXPZ-screw] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
-    
+
     // construct model
     basic_bolt(hh=hh, hd=hd, sd=sd, th=th, align=align, is_sloped=true);
 }
@@ -48,11 +52,13 @@ module LUXPZ_screw_hole(descriptor, align,
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
     assert (!is_undef(_dic_data),
             str("[DEEZ-NUTS:LUXPZ-screw-hole] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
-    hd = _dic_data[0];
-    hh = _dic_data[1];
+    
+    hd = _dic_data[0]+2*clearance;
+    hh = _dic_data[1]+clearance;
 
     // construct model
-    basic_bolt_hole(hh=hh, hd=hd, sd=sd, th=th, align=align, is_sloped=true,
-                    sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps);
+    translate([0,0,-lxk])
+        basic_bolt_hole(hh=hh, hd=hd, sd=sd, th=th, align=align, is_sloped=true,
+                        sh_off=sh_off, hh_off=hh_off+lxk, clearance=clearance, eps=eps);
 
 }
