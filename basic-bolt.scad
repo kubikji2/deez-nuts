@@ -93,7 +93,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
     // adding head access hole
     _h_eps = min(eps, hh_off);
     _hh_off = hh_off + _h_eps;
-    translate(add_vecs([0,0,_hh+_sh+_h_eps],_tf))
+    translate(add_vecs([0,0,_hh+_sh-_h_eps+clearance],_tf))
         cylinderpp(h=_hh_off, d=_hdc, align="z", $fn=head_fn);
 
     // adding shaft access hole
