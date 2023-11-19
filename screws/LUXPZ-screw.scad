@@ -4,10 +4,10 @@ include <../basic-bolt.scad>
 
 
 // dictionary to convert the shaft diameter to the head params
-LUXPZ_DIC = [   [3.0,   [ 5.8,  2.2]],
+LUXPZ_DIC = [   [3.0,   [ 5.9,  2.2]],
                 [3.5,   [ 6.9,  2.2]],
-                [4.0,   [ 7.8,  2.8]],
-                [4.5,   [ 8.8,  3.2]],
+                [4.0,   [ 7.9,  2.8]],
+                [4.5,   [ 8.9,  3.2]],
                 [6.0,   [11.8,  4.2]]];
 //                        '     '-> head height 
 //                        '-> head diameter
@@ -23,6 +23,8 @@ module LUXPZ_screw(descriptor, align)
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
+    assert (!is_undef(_dic_data),
+        str("[DEEZ-NUTS:LUXPZ-screw] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
     
@@ -44,6 +46,8 @@ module LUXPZ_screw_hole(descriptor, align,
 
     // parserd dic data
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=LUXPZ_DIC);
+    assert (!is_undef(_dic_data),
+            str("[DEEZ-NUTS:LUXPZ-screw-hole] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
 
