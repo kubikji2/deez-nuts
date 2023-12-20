@@ -9,8 +9,24 @@ DIN912_DIC = [  [2.0,   [ 3.8,  1.93]],
 //                        '     '-> head height 
 //                        '-> head diameter
 
+// DIN912 groove
+module DIN912_groove($fn = 6)
+{
+	_s = 2.5;
+	sf = 1/cos(180/$fn);
+	t = 1.3;
+	s = _s*sf;
+	x = (s/2) / tan(60);
+
+	union()
+	{
+		cylinder(h = t, d = s, $fn = 6);
+		translate([0, 0, -x]) cylinder(h = x, r2 = s/2, r1 = 0, $fn = 6);
+	}
+}
+
 // DIN912 bolt
-module DIN912_bolt(descriptor, align)
+module DIN912_bolt(descriptor, align, visual=false)
 {
     // parse bolt descriptor
     _parsed_data = deez_nuts_parse_descriptor(descriptor);
@@ -23,9 +39,21 @@ module DIN912_bolt(descriptor, align)
             str("[DEEZ-NUTS:DIN912-bolt] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
-    
     // construct model
-    basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false);
+	difference() {
+		basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false);
+    	if (visual){
+			//TODO transform as bolt
+			t = 1.3;
+			_tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
+			translate(_tf)
+			#translate([0, 0, hh+sh-t])
+			{
+				DIN912_groove();
+			}
+
+        }
+    }
 }
 
 

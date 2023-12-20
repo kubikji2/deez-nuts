@@ -22,7 +22,13 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM)
     hh = _dic_data[1];
 
     // construct model
-    basic_nut(d=hd, h=hh, align=align);    
+    difference(){
+        union(){
+			basic_nut(d=hd, h=hh-1, align=align);   
+			scale([1, 1, 1.5]) rotate_extrude(convexity=2) translate([2, 0, 0]) circle(d = 1.2);
+        }
+		cylinder(h = 8, r = 1.5);
+    }
 }
 
 
