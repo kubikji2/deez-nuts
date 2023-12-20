@@ -15,7 +15,7 @@ DIN934_DIC = [  [2.0,   [ 4.0,  1.6]],
 
 
 // DIN934 nut
-module DIN934_nut(d, align=DN_ALIGN_BOTTOM)
+module DIN934_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
 {
 
     // parserd dic data

@@ -9,7 +9,7 @@ DIN84A_DIC = [  [2.0,   [ 3.8,  1.2]],
 //                        '-> head diameter
 
 // DIN84A bolt
-module DIN84A_bolt(descriptor, align)
+module DIN84A_bolt(descriptor, align, visual=false)
 {
     // parse bolt descriptor
     _parsed_data = deez_nuts_parse_descriptor(descriptor);

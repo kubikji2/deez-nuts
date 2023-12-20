@@ -8,7 +8,7 @@ DIN933_DIC = [  [3.0,   [ 5.4,  2.0]]];
 //                        '-> head diameter
 
 // DIN933 bolt
-module DIN933_bolt(descriptor, align)
+module DIN933_bolt(descriptor, align, visual=false)
 {
     // parse bolt descriptor
     _parsed_data = deez_nuts_parse_descriptor(descriptor);

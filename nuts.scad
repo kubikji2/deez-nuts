@@ -9,23 +9,23 @@ include<nuts/DIN985-nut.scad>
 
 
 // parse avaliable nuts
-module nut(d, standard, align=DN_ALIGN_BOTTOM)
+module nut(d, standard, align=DN_ALIGN_BOTTOM, visual=false)
 {
     if (standard=="DIN439")
     {
-        DIN439_nut(d=d, align=align);
+        DIN439_nut(d=d, align=align, visual=visual);
     }
     else if (standard=="DIN562")
     {
-        DIN562_nut(d=d, align=align);
+        DIN562_nut(d=d, align=align, visual=visual);
     }
     else if (standard=="DIN934")
     {
-        DIN934_nut(d=d, align=align);
+        DIN934_nut(d=d, align=align, visual=visual);
     }
     else if (standard=="DIN985")
     {
-        DIN985_nut(d=d, align=align);
+        DIN985_nut(d=d, align=align, visual=visual);
     }
     else
     {

@@ -7,19 +7,19 @@ include<bolts/DIN912-bolt.scad>
 
 
 // parse avaliable bolts
-module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM)
+module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false)
 {
     if (standard == "DIN84A")
     {
-        DIN84A_bolt(descriptor=descriptor, align=align);
+        DIN84A_bolt(descriptor=descriptor, align=align, visual=visual);
     }
     else if(standard == "DIN933")
     {
-        DIN933_bolt(descriptor=descriptor, align=align);
+        DIN933_bolt(descriptor=descriptor, align=align, visual=visual);
     }
     else if(standard == "DIN912")
     {
-        DIN912_bolt(descriptor=descriptor, align=align);
+        DIN912_bolt(descriptor=descriptor, align=align, visual=visual);
     }
     else
     {

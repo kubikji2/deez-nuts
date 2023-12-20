@@ -12,7 +12,7 @@ DIN439_DIC = [  [3.0,   [ 5.4,  1.8]],
 
 
 // DIN439 nut
-module DIN439_nut(d, align=DN_ALIGN_BOTTOM)
+module DIN439_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
 {
 
     // parserd dic data

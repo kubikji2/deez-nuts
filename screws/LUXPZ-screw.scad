@@ -18,7 +18,7 @@ LUXPZ_DIC = [   [2.5,   [ 5.0+lxk,  (( 5.0-2.5)/2)/(tan(45))+lxk]],
 
 
 // LUXPZ screw
-module LUXPZ_screw(descriptor, align)
+module LUXPZ_screw(descriptor, align, visual=false)
 {
     // parse bolt descriptor
     _parsed_data = deez_nuts_parse_descriptor(descriptor);
