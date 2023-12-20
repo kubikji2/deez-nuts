@@ -20,8 +20,9 @@ module DIN912_groove($fn = 6)
 
 	union()
 	{
-		cylinder(h = t, d = s, $fn = 6);
-		translate([0, 0, -x]) cylinder(h = x, r2 = s/2, r1 = 0, $fn = 6);
+		cylinder(h = t+0.001, d = s, $fn = 6);
+		translate([0, 0, -x])
+            cylinder(h = x+0.001, r2 = s/2, r1 = 0, $fn = 6);
 	}
 }
 
@@ -39,15 +40,19 @@ module DIN912_bolt(descriptor, align, visual=false)
             str("[DEEZ-NUTS:DIN912-bolt] undefined entry for d=",sd, " from descriptor ", descriptor, "!"));
     hd = _dic_data[0];
     hh = _dic_data[1];
+
     // construct model
-	difference() {
-		basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false);
+	difference()
+    {
+		
+        basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false);
+
     	if (visual){
 			//TODO transform as bolt
 			t = 1.3;
 			_tf = deez_nuts_align_to_transform(sh=sh, hh=hh, align=align);
 			translate(_tf)
-			#translate([0, 0, hh+sh-t])
+			translate([0, 0, hh+sh-t])
 			{
 				DIN912_groove();
 			}

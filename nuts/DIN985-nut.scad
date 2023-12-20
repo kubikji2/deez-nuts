@@ -11,7 +11,7 @@ DIN985_DIC = [  [3.0,   [ 5.4,  3.9]],
 //                        '-> head diameter
 
 // DIN985 nut
-module DIN985_nut(d, align=DN_ALIGN_BOTTOM)
+module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
 {
 
     // parserd dic data
@@ -22,12 +22,25 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM)
     hh = _dic_data[1];
 
     // construct model
-    difference(){
-        union(){
-			basic_nut(d=hd, h=hh-1, align=align);   
-			scale([1, 1, 1.5]) rotate_extrude(convexity=2) translate([2, 0, 0]) circle(d = 1.2);
+    if (visual)
+    {
+        difference(){
+            union()
+            {
+                basic_nut(d=hd, h=hh-1, align=align);   
+                
+                scale([1, 1, 1.5])
+                    rotate_extrude(convexity=2)
+                        translate([2, 0, 0])
+                            circle(d = 1.2);
+            }
+
+            cylinderpp(h = 3*hh, r = 1.5, align = "");
         }
-		cylinder(h = 8, r = 1.5);
+    }
+    else
+    {
+        basic_nut(d=hd, h=hh, align=align);   
     }
 }
 
