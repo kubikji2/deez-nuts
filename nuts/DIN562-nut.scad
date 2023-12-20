@@ -15,7 +15,7 @@ DIN562_DIC = [  [3.0,   [ 5.4,  1.8]],
 
 
 // DIN562 nut
-module DIN562_nut(d, align=DN_ALIGN_BOTTOM)
+module DIN562_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
 {
 
     // parserd dic data
