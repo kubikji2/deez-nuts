@@ -24,6 +24,7 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
     // construct model
     if (visual)
     {
+        render(2)
         difference(){
             union()
             {
