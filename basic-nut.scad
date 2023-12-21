@@ -9,10 +9,11 @@ include <utils.scad>
 
 // basic nut
 // '-> argument 'd' is inner (side-to-side) diameter
-// '-> argument 'D' is outer (corner-to-coren) diameter
+// '-> argument 'D' is outer (corner-to-corner) diameter
 // '-> argument 'h' is nut height
+// '-> argument 'r' is hole radius
 // '-> argument 'align' is nut alignment
-module basic_nut(d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM)
+module basic_nut(d=undef, D=undef, h=undef, r=undef, align=DN_ALIGN_BOTTOM, visual=false)
 {
 
     assert( __deez_nuts__count_undef_in_list([d, D]) == 1,
@@ -25,8 +26,16 @@ module basic_nut(d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM)
                 (align==DN_ALIGN_TOP) ?
                     "Z" : "";
 
-    cylinderpp(d=_D, h=h, align=_align, $fn=6);
+    difference()
+    {
+        cylinderpp(d=_D, h=h, align=_align, $fn=6);
 
+        if(visual)
+        {
+            cylinderpp(r=r, h=3*h, align="");
+        }
+    }
+    
 }
 
 

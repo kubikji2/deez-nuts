@@ -23,7 +23,7 @@ module DIN439_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
     hh = _dic_data[1];
 
     // construct model
-    basic_nut(d=hd, h=hh, align=align);    
+    basic_nut(d=hd, h=hh, r=d/2, align=align, visual=visual);    
 }
 
 

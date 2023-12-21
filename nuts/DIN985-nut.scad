@@ -34,7 +34,7 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
         difference(){
             union()
             {
-                basic_nut(d=hd, h=hh-1, align=align);   
+                basic_nut(d=hd, h=hh-1, r=d/2, align=align, visual=visual);   
                 
                 translate([0,0,_off])
                     scale([1, 1, 1.5])
@@ -43,7 +43,7 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
                                 circle(d = 1.2);
             }
 
-            cylinderpp(h = 3*hh, r = 1.5, align = "");
+            //cylinderpp(h = 3*hh, r = 1.5, align = "");
         }
     }
     else
