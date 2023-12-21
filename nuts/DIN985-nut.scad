@@ -24,16 +24,22 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
     // construct model
     if (visual)
     {
+        _off = (align==DN_ALIGN_BOTTOM) ? 
+                0 :
+                (align==DN_ALIGN_TOP) ?
+                    hh : hh/2;
+
         render(2)
         difference(){
             union()
             {
                 basic_nut(d=hd, h=hh-1, align=align);   
                 
-                scale([1, 1, 1.5])
-                    rotate_extrude(convexity=2)
-                        translate([2, 0, 0])
-                            circle(d = 1.2);
+                translate([0,0,_off])
+                    scale([1, 1, 1.5])
+                        rotate_extrude(convexity=2)
+                            translate([2, 0, 0])
+                                circle(d = 1.2);
             }
 
             cylinderpp(h = 3*hh, r = 1.5, align = "");
