@@ -24,10 +24,11 @@ module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
     // construct model
     if (visual)
     {
+        // TODO fix hardcoded offset
         _off = (align==DN_ALIGN_BOTTOM) ? 
-                0 :
+                hh - 1 :
                 (align==DN_ALIGN_TOP) ?
-                    hh : hh/2;
+                    0 : (hh-1)/2;
 
         render(2)
         difference(){
