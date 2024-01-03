@@ -1,6 +1,9 @@
 // include constants for align values
 include<constants.scad>
 
+// include utils for diampeter parsin
+include<utils.scad>
+
 include<bolts/DIN84A-bolt.scad>
 include<bolts/DIN933-bolt.scad>
 include<bolts/DIN912-bolt.scad>
@@ -57,3 +60,17 @@ module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
     }
 }
 
+
+// bolt functions 
+__dn_bolt_functions = [["DIN84A", function(x,y) DIN84A_get_head_diameter(x,y)],
+                       ["DIN933", function(x,y) DIN933_get_head_diameter(x,y)],
+                       ["DIN912", function(x,y) DIN912_get_head_diameter(x,y)]];
+
+// return head deameter
+// circumradius vs inradius
+function get_head_diameter(descriptor, standard, is_inradius=false) =
+    let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_bolt_functions))
+    echo(fnc)
+    is_undef(fnc) ?
+        undef :
+        fnc(descriptor, is_inradius);

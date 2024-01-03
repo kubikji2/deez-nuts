@@ -51,3 +51,9 @@ module DIN84A_bolt_hole(descriptor, align,
                     sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps);
 
 }
+
+
+// DIN84A get head diameter
+function DIN84A_get_head_diameter(descriptor, is_inradius) =
+    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN84A_DIC, is_inradius=is_inradius);
+    
