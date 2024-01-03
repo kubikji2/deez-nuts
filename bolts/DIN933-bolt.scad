@@ -56,3 +56,7 @@ module DIN933_bolt_hole(descriptor, align,
 function DIN933_get_head_diameter(descriptor, is_inradius) =
     let(_sf = is_inradius ? 1 : 1/sin(60))
     _sf*basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN933_DIC, is_inradius=is_inradius);
+
+// DIN933 get head height
+function DIN933_get_head_height(descriptor) =
+    basic_bolt_get_head_height(descriptor=descriptor, dic=DIN933_DIC);

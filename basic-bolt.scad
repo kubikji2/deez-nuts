@@ -103,6 +103,7 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 
 }
 
+
 // basic implementation to get head diameter from the provided
 function basic_bolt_get_head_diameter(descriptor, dic, is_inradius) =
     let(
@@ -111,3 +112,13 @@ function basic_bolt_get_head_diameter(descriptor, dic, is_inradius) =
         _dic_data = deez_nuts_find_in_dic(key=sd, dic=dic))
     is_undef(_dic_data) ?
         undef : _dic_data[0];
+
+
+// basic implementation to get head height from the provided
+function basic_bolt_get_head_height(descriptor, dic) =
+    let(
+        _parsed_data = deez_nuts_parse_descriptor(descriptor),
+        sd = _parsed_data[0],
+        _dic_data = deez_nuts_find_in_dic(key=sd, dic=dic))
+    is_undef(_dic_data) ?
+        undef : _dic_data[1];

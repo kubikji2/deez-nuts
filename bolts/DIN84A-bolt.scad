@@ -57,3 +57,8 @@ module DIN84A_bolt_hole(descriptor, align,
 function DIN84A_get_head_diameter(descriptor, is_inradius) =
     basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN84A_DIC, is_inradius=is_inradius);
     
+
+// DIN84A get head height
+function DIN84A_get_head_height(descriptor) =
+    basic_bolt_get_head_height(descriptor=descriptor, dic=DIN84A_DIC);
+    

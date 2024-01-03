@@ -91,3 +91,7 @@ module DIN912_bolt_hole(descriptor, align,
 // DIN912 get head diameter
 function DIN912_get_head_diameter(descriptor, is_inradius) =
     basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN912_DIC, is_inradius=is_inradius);
+
+// DIN912 get head height
+function DIN912_get_head_height(descriptor) =
+    basic_bolt_get_head_height(descriptor=descriptor, dic=DIN912_DIC);
