@@ -89,3 +89,9 @@ module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
         cubepp([_d, _d, _h+h_off], align="z"); 
 
 }
+
+
+// DIN562 get diameter
+function DIN562_get_diameter(d, is_inradius) =
+    let(sf = is_inradius ? 1 : 1/sin(45))
+    sf*basic_nut_get_head_diameter(d=d, dic=DIN562_DIC, is_inradius=true);

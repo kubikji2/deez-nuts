@@ -68,9 +68,8 @@ __dn_bolt_functions = [["DIN84A", function(x,y) DIN84A_get_head_diameter(x,y)],
 
 // return head deameter
 // circumradius vs inradius
-function get_head_diameter(descriptor, standard, is_inradius=false) =
+function get_bolt_head_diameter(descriptor, standard, is_inradius=false) =
     let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_bolt_functions))
-    echo(fnc)
     is_undef(fnc) ?
         undef :
         fnc(descriptor, is_inradius);

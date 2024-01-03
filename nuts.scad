@@ -63,3 +63,18 @@ module nut_hole(d, standard, align=DN_ALIGN_BOTTOM, s_off=0,
         assert(false, "[NUT-HOLE] standard: ", standard, " is not implemented!");
     }
 }
+
+
+// bolt functions 
+__dn_nut_functions = [  ["DIN439", function(x,y) DIN439_get_diameter(x,y)],
+                        ["DIN562", function(x,y) DIN562_get_diameter(x,y)],
+                        ["DIN934", function(x,y) DIN934_get_diameter(x,y)],
+                        ["DIN985", function(x,y) DIN985_get_diameter(x,y)]];
+
+// return head deameter
+// circumradius vs inradius
+function get_nut_diameter(d, standard, is_inradius=false) =
+    let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_nut_functions))
+    is_undef(fnc) ?
+        undef :
+        fnc(d, is_inradius);

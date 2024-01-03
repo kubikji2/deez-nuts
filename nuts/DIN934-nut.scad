@@ -50,3 +50,9 @@ module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
                     h_clearance=h_clearance);
 
 }
+
+
+// DIN934 get diameter
+function DIN934_get_diameter(d, is_inradius) =
+    let(sf = is_inradius ? 1 : 1/sin(60) )
+    sf*basic_nut_get_head_diameter(d=d, dic=DIN934_DIC, is_inradius=true);

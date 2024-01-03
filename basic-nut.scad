@@ -91,3 +91,11 @@ module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM,
     translate(_hole_tf)
         cylinderpp(d=_D, h=h_off, align="Z", $fn=6); 
 }
+
+
+// basic implementation to get head diameter from the provided
+function basic_nut_get_head_diameter(d, dic, is_inradius) =
+    let(
+        _dic_data = deez_nuts_find_in_dic(key=d, dic=dic))
+    is_undef(_dic_data) ?
+        undef : _dic_data[0];
