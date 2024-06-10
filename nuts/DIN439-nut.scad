@@ -5,7 +5,10 @@ include <../basic-bolt.scad>
 
 // TODO add all dimensions
 // dictionary to convert the shaft diameter to the head params
-DIN439_DIC = [  [3.0,   [ 5.4,  1.8]],
+// based on: https://www.fasteners.eu/standards/DIN/439-B/
+DIN439_DIC = [  [2.0,   [ 4.0,  1.2]],
+                [2.5,   [ 5.0,  1.6]],
+                [3.0,   [ 5.4,  1.8]],
                 [6.0,   []]];
 //                        '     '-> head height 
 //                        '-> head diameter

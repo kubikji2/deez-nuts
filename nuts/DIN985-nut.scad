@@ -5,7 +5,10 @@ include <../basic-nut.scad>
 
 // TODO add all dimensions
 // dictionary to convert the shaft diameter to the head params
-DIN985_DIC = [  [3.0,   [ 5.4,  3.9]],
+// based on: https://www.beaconcorporation.co.uk/products/nuts/din-985-dimensions/
+//           https://monsterbolts.com/products/nuts-din985-zn10-9
+DIN985_DIC = [  [2.5,   [ 5.0,  3.4]],
+                [3.0,   [ 5.4,  3.9]],
                 [6.0,   []]];
 //                        '     '-> head height 
 //                        '-> head diameter

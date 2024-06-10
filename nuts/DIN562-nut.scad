@@ -7,7 +7,10 @@ include <../solidpp/solidpp.scad>
 
 // TODO add all dimensions
 // dictionary to convert the shaft diameter to the head params
-DIN562_DIC = [  [3.0,   [ 5.4,  1.8]],
+// based on: https://www.beaconcorporation.co.uk/products/nuts/din-562-dimensions/
+DIN562_DIC = [  [2.0,   [ 4.0,  1.4]],
+                [2.5,   [ 5.0,  1.6]],
+                [3.0,   [ 5.4,  1.8]],
                 [6.0,   []]];
 //                        '     '-> head height 
 //                        '-> head side
