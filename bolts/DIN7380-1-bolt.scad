@@ -27,7 +27,7 @@ module DIN73801_bolt(descriptor, align, visual=false)
     hh = _dic_data[1];
     
     // construct model
-    basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false, head_fn=6);
+    basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false);
 }
 
 
@@ -51,7 +51,7 @@ module DIN73801_bolt_hole(descriptor, align,
 
     // construct model
     basic_bolt_hole(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false,
-                    sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps, head_fn=6);
+                    sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps);
 
 }
 
