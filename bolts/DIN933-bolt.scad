@@ -3,7 +3,11 @@ include <../utils.scad>
 include <../basic-bolt.scad>
 
 // dictionary to convert the shaft diameter to the head params
-DIN933_DIC = [  [3.0,   [ 5.4,  2.0]]];
+// based on:
+// https://www.dingfastener.com/din-933/
+DIN933_DIC = [  [ 3.0,   [ 6.0,  2.0]],
+                [ 4.0,   [ 7.7,  2.8]],
+                [10.0,   [19.0,  6.4]]];
 //                        '     '-> head height 
 //                        '-> head diameter
 
