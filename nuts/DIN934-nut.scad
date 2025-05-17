@@ -5,12 +5,14 @@ include <../basic-nut.scad>
 
 // TODO add all dimensions
 // dictionary to convert the shaft diameter to the head params
-// based on: https://www.fasteners.eu/standards/DIN/934/
+// based on: https://www.dingfastener.com/din-934/
+//           https://www.fasteners.eu/standards/DIN/934/
 //           https://www.beaconcorporation.co.uk/products/nuts/din934-dimensions/
-DIN934_DIC = [  [2.0,   [ 4.0,  1.6]],
-                [2.5,   [ 5.0,  2.0]],
-                [3.0,   [ 5.5,  2.4]],
-                [6.0,   [10.0,  5.0]]];
+DIN934_DIC = [  [ 2.0,   [ 4.0,  1.6]],
+                [ 2.5,   [ 5.0,  2.0]],
+                [ 3.0,   [ 5.5,  2.4]],
+                [ 6.0,   [10.0,  5.0]],
+                [10.0,   [17.0,  8.0]]];
 //                        '     '-> head height 
 //                        '-> head diameter
 
