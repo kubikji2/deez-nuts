@@ -13,7 +13,7 @@ LUXPZ_DIC = [   [2.5,   [ 5.0+lxk,  (( 5.0-2.5)/2)/(tan(45))+lxk]],
                 [4.5,   [ 9.0+lxk,  (( 9.0-4.5)/2)/(tan(45))+lxk]],
                 [5.0,   [10.0+lxk,  ((10.0-5.0)/2)/(tan(45))+lxk]],
                 [6.0,   [12.0+lxk,  ((12.0-6.0)/2)/(tan(45))+lxk]]];
-//                        '     '-> head height 
+//                        '          '-> head height 
 //                        '-> head diameter
 
 
@@ -62,3 +62,11 @@ module LUXPZ_screw_hole(descriptor, align,
                         sh_off=sh_off, hh_off=hh_off+lxk, clearance=clearance, eps=eps);
 
 }
+
+// LUXPZ get diameter
+function LUXPZ_get_head_diameter(descriptor, is_inradius) =
+    basic_bolt_get_head_diameter(descriptor=descriptor, dic=LUXPZ_DIC, is_inradius=is_inradius);
+
+// LUXPZ get height
+function LUXPZ_get_head_height(descriptor) =
+    basic_bolt_get_head_height(descriptor=descriptor, dic=LUXPZ_DIC);

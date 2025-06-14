@@ -35,3 +35,27 @@ module screw_hole(  descriptor, standard, align=DN_ALIGN_BOTTOM,
         assert(false, str("[SCREW-HOLE] standard: ", standard, " is not implemented!"));
     }
 }
+
+
+// screw diameter functions 
+__dn_screw_diameter_functions = [["LUXPZ",      function(x,y) LUXPZ_get_head_diameter(x,y)]];
+
+// return head deameter
+// circumradius vs inradius
+function get_screw_head_diameter(descriptor, standard, is_inradius=false) =
+    let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_screw_diameter_functions))
+    is_undef(fnc) ?
+        undef :
+        fnc(descriptor, is_inradius);
+
+
+// screw functions 
+__dn_screw_height_functions = [  ["LUXPZ", function(x) LUXPZ_get_head_height(x)]];
+
+// return head deameter
+// circumradius vs inradius
+function get_screw_head_height(descriptor, standard) =
+    let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_screw_height_functions))
+    is_undef(fnc) ?
+        undef :
+        fnc(descriptor);
