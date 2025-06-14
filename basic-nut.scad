@@ -94,7 +94,7 @@ module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM,
 
 
 // basic implementation to get head diameter from the provided
-function basic_nut_get_head_diameter(d, dic) =
+function basic_nut_get_diameter(d, dic) =
     let(
         _dic_data = deez_nuts_find_in_dic(key=d, dic=dic))
     is_undef(_dic_data) ?
@@ -102,7 +102,7 @@ function basic_nut_get_head_diameter(d, dic) =
 
 
 // basic implementation to get head height from the provided
-function basic_nut_get_head_height(d, dic) =
+function basic_nut_get_height(d, dic) =
     let(
         _dic_data = deez_nuts_find_in_dic(key=d, dic=dic))
     is_undef(_dic_data) ?
