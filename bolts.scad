@@ -8,7 +8,7 @@ include<bolts/DIN84A-bolt.scad>
 include<bolts/DIN933-bolt.scad>
 include<bolts/DIN912-bolt.scad>
 include<bolts/DIN7380-1-bolt.scad>
-include<bolts/DIN7991.scad>
+include<bolts/DIN7991-bolt.scad>
 
 
 // parse avaliable bolts
