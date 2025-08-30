@@ -29,6 +29,10 @@ module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false)
     {
         DIN73801_bolt(descriptor=descriptor, align=align, visual=visual);
     }
+    else if (standard == "DIN7991")
+    {
+        DIN7991_bolt(descriptor=descriptor, align=align, visual=visual);
+    }
     else
     {
         assert(false, str("[BOLT] standard: ", standard, " is not implemented!"));
@@ -62,6 +66,12 @@ module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
     else if (standard == "DIN7380-1" || standard == "DIN73801")
     {
         DIN73801_bolt_hole( descriptor=descriptor, align=align,
+                            sh_off=sh_off, hh_off=hh_off,
+                            clearance=clearance, eps=eps);
+    }
+    else if (standard == "DIN7991")
+    {
+        DIN7991_bolt_hole(  descriptor=descriptor, align=align,
                             sh_off=sh_off, hh_off=hh_off,
                             clearance=clearance, eps=eps);
     }
