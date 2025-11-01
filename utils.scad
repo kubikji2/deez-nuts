@@ -67,8 +67,8 @@ function deez_nuts_find_in_dic(key, dic, cnt=0, data=undef) =
             deez_nuts_find_in_dic(key=key, dic=dic, cnt=cnt+1, data=data);
 
 
-// coverts regular polygon width (parallel side distance) aka its inscibed radius
-// to the CIRCUMSCRIBED RADIUS:
+// coverts regular polygon width (parallel side distance) aka its inscibed diameter
+// to the CIRCUMSCRIBED DIAMETER:
 //      
 //      ________ ________
 //     /        \       ^   
@@ -83,14 +83,14 @@ function deez_nuts_find_in_dic(key, dic, cnt=0, data=undef) =
 //
 //
 // This eneable to convert measured width of polygons such as hexagonal nut/bolt-heads,
-// in to the "radius" for the openscad cylinder + $fn combination:
+// in to the "diameter" for the openscad cylinder + $fn combination:
 // 
 //      // M10 nut measured height
 //      h = 7;
 //      // M10 nut measured width -- easily measured
 //      w = 17; 
 //      // M10 nut "corner distance" -- tricky to measured
-//      d = deez_nutz_width_to_circumscribed_radius(w, fn=6);
+//      d = deez_nutz_polygon_width_to_circumscribed_diameter(w, fn=6);
 //      // the nut model without the any clearances
 //      cylinder(d=d, h=7, $fn=6); 
 //
@@ -98,7 +98,7 @@ function deez_nutz_polygon_width_to_circumscribed_diameter(w, fn=6) = w/(cos(180
 
 
 // coverts regular polygon width (parallel side distance) to
-// the INSCRIBED RADIUS in openscad this is IDENTITY in OpenSCAD:
+// the INSCRIBED DIAMETER in openscad this is IDENTITY in OpenSCAD:
 //      
 //      ________ ________
 //     /        \       ^   
@@ -112,4 +112,4 @@ function deez_nutz_polygon_width_to_circumscribed_diameter(w, fn=6) = w/(cos(180
 //  |<--  input -->|
 //
 //
-function deez_nutz_width_to_inscribed_radius(r, fn=6) = r;
+function deez_nutz_poluygon_width_to_inscribed_diameter(r, fn=6) = r;
