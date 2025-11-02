@@ -104,8 +104,9 @@ module basic_bolt_hole( hh=undef, hd=undef, sh=undef, sd=undef, th=undef,
 }
 
 
-// basic implementation to get head diameter from the provided
-function basic_bolt_get_head_diameter(descriptor, dic, is_inradius) =
+// basic implementation to get head diameter
+// from provided descriptor and dictionary
+function basic_bolt_get_head_diameter(descriptor, dic) =
     let(
         _parsed_data = deez_nuts_parse_descriptor(descriptor),
         sd = _parsed_data[0],

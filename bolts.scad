@@ -93,11 +93,14 @@ __dn_bolt_diameter_functions = [["DIN84A",      function(x,y) DIN84A_get_head_di
 
 // return head deameter
 // circumradius vs inradius
-function get_bolt_head_diameter(descriptor, standard, is_inradius=false) =
+// - argument 'is_circumscribed' takes an effect only for the non-circular bolt heads
+//   '-> by default, the the circum-diameter is used, as it is expected that the ddiameter
+//       is used to drill a hole using cylinder + $fn=N combination
+function get_bolt_head_diameter(descriptor, standard, is_circumscribed=true) =
     let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_bolt_diameter_functions))
     is_undef(fnc) ?
         undef :
-        fnc(descriptor, is_inradius);
+        fnc(descriptor, is_circumscribed);
 
 
 // bolt functions 

@@ -63,8 +63,9 @@ module DIN7991_bolt_hole(descriptor, align,
 }
 
 // DIN7991 get diameter
-function DIN7991_get_head_diameter(descriptor, is_inradius) =
-    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN7991_DIC, is_inradius=is_inradius);
+// NOTE: argument is_circumscribed is irrelevant for this cylindrical-headed bolt
+function DIN7991_get_head_diameter(descriptor, is_circumscribed) =
+    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN7991_DIC);
 
 // DIN7991 get height
 function DIN7991_get_head_height(descriptor) =

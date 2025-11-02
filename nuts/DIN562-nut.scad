@@ -6,14 +6,14 @@ include <../basic-bolt.scad>
 include <../solidpp/solidpp.scad>
 
 // TODO add all dimensions
-// dictionary to convert the shaft diameter to the head params
+// dictionary to convert the shaft diameter to the nut params
 // based on: https://www.beaconcorporation.co.uk/products/nuts/din-562-dimensions/
 DIN562_DIC = [  [2.0,   [ 4.0,  1.4]],
                 [2.5,   [ 5.0,  1.6]],
                 [3.0,   [ 5.4,  1.8]],
                 [6.0,   []]];
-//                        '     '-> head height 
-//                        '-> head side
+//                        |     '-> nut height 
+//                        '-> nut width (side-to-side)
 
 
 
@@ -95,9 +95,9 @@ module DIN562_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
 
 // DIN562 get diameter
-function DIN562_get_diameter(d, is_inradius) =
-    let(sf = is_inradius ? 1 : 1/sin(45))
-    sf*basic_nut_get_diameter(d=d, dic=DIN562_DIC);
+function DIN562_get_diameter(d, is_circumscribed) =
+    let(diameter=basic_nut_get_diameter(d=d, dic=DIN562_DIC))
+    is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 4) : diameter;
 
 
 // DIN562 get height

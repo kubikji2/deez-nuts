@@ -4,7 +4,7 @@ include <../basic-nut.scad>
 
 
 // TODO add all dimensions
-// dictionary to convert the shaft diameter to the head params
+// dictionary to convert the shaft diameter to the nut params
 // based on: https://www.dingfastener.com/din-934/
 //           https://www.fasteners.eu/standards/DIN/934/
 //           https://www.beaconcorporation.co.uk/products/nuts/din934-dimensions/
@@ -13,8 +13,8 @@ DIN934_DIC = [  [ 2.0,   [ 4.0,  1.6]],
                 [ 3.0,   [ 5.5,  2.4]],
                 [ 6.0,   [10.0,  5.0]],
                 [10.0,   [17.0,  8.0]]];
-//                        '     '-> head height 
-//                        '-> head diameter
+//                        |     '-> nut height 
+//                        '-> width (side-to-side)
 
 
 // DIN934 nut
@@ -56,9 +56,10 @@ module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
 
 // DIN934 get diameter
-function DIN934_get_diameter(d, is_inradius) =
-    let(sf = is_inradius ? 1 : 1/sin(60) )
-    sf*basic_nut_get_diameter(d=d, dic=DIN934_DIC);
+function DIN934_get_diameter(d, is_circumscribed) =
+    let(diameter=basic_nut_get_diameter(d=d, dic=DIN934_DIC))
+    is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 6) : diameter;
+
 
 // DIN934 get height
 function DIN934_get_height(d) =

@@ -18,7 +18,7 @@ module basic_nut(d=undef, D=undef, h=undef, r=undef, align=DN_ALIGN_BOTTOM, visu
 
     assert( __deez_nuts__count_undef_in_list([d, D]) == 1,
             str("[DEEZ-NUTS:basic-nut] define exactly one d=", d ," or D=", D, "!"));
-    
+    // TODO fix this
     _D = is_undef(D) ? d/sin(60) : D;
 
     _align = (align==DN_ALIGN_BOTTOM) ? 
@@ -57,7 +57,7 @@ module basic_nut_hole(  d=undef, D=undef, h=undef, align=DN_ALIGN_BOTTOM,
             str("[DEEZ-NUTS:basic-nut-hole] define exactly one d=", d ," or D=", D, "!"));
     
     _h_clearance = is_undef(h_clearance) ? clearance : h_clearance;
-
+    // TODO fix this
     _D = is_undef(D) ? d/sin(60) + 2*clearance : D + 2*clearance;
     _h = h + 2*_h_clearance;
 

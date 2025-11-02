@@ -64,8 +64,8 @@ module LUXPZ_screw_hole(descriptor, align,
 }
 
 // LUXPZ get diameter
-function LUXPZ_get_head_diameter(descriptor, is_inradius) =
-    basic_bolt_get_head_diameter(descriptor=descriptor, dic=LUXPZ_DIC, is_inradius=is_inradius);
+function LUXPZ_get_head_diameter(descriptor, is_circumscribed) =
+    basic_bolt_get_head_diameter(descriptor=descriptor, dic=LUXPZ_DIC);
 
 // LUXPZ get height
 function LUXPZ_get_head_height(descriptor) =

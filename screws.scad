@@ -42,11 +42,11 @@ __dn_screw_diameter_functions = [["LUXPZ",      function(x,y) LUXPZ_get_head_dia
 
 // return head deameter
 // circumradius vs inradius
-function get_screw_head_diameter(descriptor, standard, is_inradius=false) =
+function get_screw_head_diameter(descriptor, standard, is_circumscribed=false) =
     let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_screw_diameter_functions))
     is_undef(fnc) ?
         undef :
-        fnc(descriptor, is_inradius);
+        fnc(descriptor, is_circumscribed);
 
 
 // screw functions 

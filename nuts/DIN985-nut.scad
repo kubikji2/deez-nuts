@@ -4,14 +4,14 @@ include <../basic-nut.scad>
 
 
 // TODO add all dimensions
-// dictionary to convert the shaft diameter to the head params
+// dictionary to convert the shaft diameter to the nut params
 // based on: https://www.beaconcorporation.co.uk/products/nuts/din-985-dimensions/
 //           https://monsterbolts.com/products/nuts-din985-zn10-9
 DIN985_DIC = [  [2.5,   [ 5.0,  3.4]],
                 [3.0,   [ 5.4,  3.9]],
                 [6.0,   []]];
-//                        '     '-> head height 
-//                        '-> head diameter
+//                        |     '-> nut height 
+//                        '-> width (side-to-side)
 
 // DIN985 nut
 module DIN985_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
@@ -78,9 +78,10 @@ module DIN985_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
 
 
 // DIN985 get diameter
-function DIN985_get_diameter(d, is_inradius) =
-    let(sf = is_inradius ? 1 : 1/sin(60) )
-    sf*basic_nut_get_diameter(d=d, dic=DIN985_DIC);
+function DIN985_get_diameter(d, is_circumscribed) =
+    let(diameter=basic_nut_get_diameter(d=d, dic=DIN985_DIC))
+    is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 6) : diameter;
+
 
 // DIN985 get height
 function DIN985_get_height(d) =
