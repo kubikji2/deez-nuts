@@ -8,6 +8,7 @@ include<bolts/DIN84A-bolt.scad>
 include<bolts/DIN933-bolt.scad>
 include<bolts/DIN912-bolt.scad>
 include<bolts/DIN7380-1-bolt.scad>
+include<bolts/DIN7991-bolt.scad>
 
 
 // parse avaliable bolts
@@ -28,6 +29,10 @@ module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false)
     else if (standard == "DIN7380-1" || standard == "DIN73801")
     {
         DIN73801_bolt(descriptor=descriptor, align=align, visual=visual);
+    }
+    else if (standard == "DIN7991")
+    {
+        DIN7991_bolt(descriptor=descriptor, align=align, visual=visual);
     }
     else
     {
@@ -65,6 +70,12 @@ module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
                             sh_off=sh_off, hh_off=hh_off,
                             clearance=clearance, eps=eps);
     }
+    else if (standard == "DIN7991")
+    {
+        DIN7991_bolt_hole(  descriptor=descriptor, align=align,
+                            sh_off=sh_off, hh_off=hh_off,
+                            clearance=clearance, eps=eps);
+    }
     else
     {
         assert(false, str("[BOLT-HOLE] standard: ", standard, " is not implemented!"));
@@ -77,15 +88,19 @@ __dn_bolt_diameter_functions = [["DIN84A",      function(x,y) DIN84A_get_head_di
                                 ["DIN933",      function(x,y) DIN933_get_head_diameter(x,y)],
                                 ["DIN912",      function(x,y) DIN912_get_head_diameter(x,y)],
                                 ["DIN7380-1",   function(x,y) DIN73801_get_head_diameter(x,y)],
-                                ["DIN73801",    function(x,y) DIN73801_get_head_diameter(x,y)]];
+                                ["DIN73801",    function(x,y) DIN73801_get_head_diameter(x,y)],
+                                ["DIN7991",     function(x,y) DIN7991_get_head_diameter(x,y)]];
 
 // return head deameter
 // circumradius vs inradius
-function get_bolt_head_diameter(descriptor, standard, is_inradius=false) =
+// - argument 'is_circumscribed' takes an effect only for the non-circular bolt heads
+//   '-> by default, the the circum-diameter is used, as it is expected that the ddiameter
+//       is used to drill a hole using cylinder + $fn=N combination
+function get_bolt_head_diameter(descriptor, standard, is_circumscribed=true) =
     let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_bolt_diameter_functions))
     is_undef(fnc) ?
         undef :
-        fnc(descriptor, is_inradius);
+        fnc(descriptor, is_circumscribed);
 
 
 // bolt functions 
@@ -93,7 +108,8 @@ __dn_bolt_height_functions = [  ["DIN84A", function(x) DIN84A_get_head_height(x)
                                 ["DIN933", function(x) DIN933_get_head_height(x)],
                                 ["DIN912", function(x) DIN912_get_head_height(x)],
                                 ["DIN7380-1",   function(x) DIN73801_get_head_height(x)],
-                                ["DIN73801",    function(x) DIN73801_get_head_height(x)]];
+                                ["DIN73801",    function(x) DIN73801_get_head_height(x)],
+                                ["DIN7991",     function(x) DIN7991_get_head_height(x)]];
 
 // return head deameter
 // circumradius vs inradius

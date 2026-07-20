@@ -72,11 +72,11 @@ __dn_nut_diameter_functions = [ ["DIN439", function(x,y) DIN439_get_diameter(x,y
                                 ["DIN985", function(x,y) DIN985_get_diameter(x,y)]];
 
 // return nut diameter
-function get_nut_diameter(d, standard, is_inradius=false) =
+function get_nut_diameter(d, standard, is_circumscribed=true) =
     let(fnc = deez_nuts_find_in_dic(key=standard, dic=__dn_nut_diameter_functions))
     is_undef(fnc) ?
         undef :
-        fnc(d, is_inradius);
+        fnc(d, is_circumscribed);
 
 
 // nut height functions 

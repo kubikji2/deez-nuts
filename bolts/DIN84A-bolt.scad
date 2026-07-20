@@ -54,8 +54,9 @@ module DIN84A_bolt_hole(descriptor, align,
 
 
 // DIN84A get head diameter
-function DIN84A_get_head_diameter(descriptor, is_inradius) =
-    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN84A_DIC, is_inradius=is_inradius);
+// NOTE: argument is_circumscribed is irrelevant for this cylindrical-headed bolt
+function DIN84A_get_head_diameter(descriptor, is_circumscribed) =
+    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN84A_DIC);
     
 
 // DIN84A get head height

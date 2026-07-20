@@ -5,11 +5,11 @@ include <../basic-bolt.scad>
 // dictionary to convert the shaft diameter to the head params
 // based on:
 // https://www.dingfastener.com/din-933/
-DIN933_DIC = [  [ 3.0,   [ 6.0,  2.0]],
-                [ 4.0,   [ 7.7,  2.8]],
-                [10.0,   [19.0,  6.4]]];
+DIN933_DIC = [  [ 3.0,   [ 5.4,  2.0]],
+                [ 4.0,   [ 6.9,  2.8]],
+                [10.0,   [16.9,  6.4]]];
 //                        '     '-> head height 
-//                        '-> head diameter
+//                        '-> head width (side-to-side)
 
 // DIN933 bolt
 module DIN933_bolt(descriptor, align, visual=false)
@@ -23,7 +23,7 @@ module DIN933_bolt(descriptor, align, visual=false)
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=DIN933_DIC);
     assert (!is_undef(_dic_data),
             str("[DEEZ-NUTS:DIN933-bolt] undefined entry for d=", sd, " from descriptor ", descriptor, "!"));
-    hd = _dic_data[0];
+    hd = deez_nutz_polygon_width_to_circumscribed_diameter(_dic_data[0], 6);
     hh = _dic_data[1];
     
     // construct model
@@ -46,7 +46,7 @@ module DIN933_bolt_hole(descriptor, align,
     _dic_data = deez_nuts_find_in_dic(key=sd, dic=DIN933_DIC);
     assert (!is_undef(_dic_data),
             str("[DEEZ-NUTS:DIN933-bolt-hole] undefined entry for d=", sd, " from descriptor ", descriptor, "!"));
-    hd = _dic_data[0];
+    hd = deez_nutz_polygon_width_to_circumscribed_diameter(_dic_data[0], 6);
     hh = _dic_data[1];
 
     // construct model
@@ -57,9 +57,10 @@ module DIN933_bolt_hole(descriptor, align,
 
 
 // DIN933 get head diameter
-function DIN933_get_head_diameter(descriptor, is_inradius) =
-    let(_sf = is_inradius ? 1 : 1/sin(60))
-    _sf*basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN933_DIC, is_inradius=is_inradius);
+function DIN933_get_head_diameter(descriptor, is_circumscribed) =
+    let(diameter=basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN933_DIC))
+    is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 6) : diameter;
+
 
 // DIN933 get head height
 function DIN933_get_head_height(descriptor) =
