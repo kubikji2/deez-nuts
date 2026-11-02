@@ -5,6 +5,7 @@ include <../basic-bolt.scad>
 // dictionary to convert the shaft diameter to the head params
 DIN912_DIC = [  [2.0,   [ 3.8,  1.93]],
                 [2.5,   [ 4.5,  2.43]],
+                [5.0,   [ 8.5,  5.00]],
                 [3.0,   [ 5.5,  2.93]]];
 //                        '     '-> head height 
 //                        '-> head diameter
