@@ -2,7 +2,8 @@
 // NOTE: included by deez-nuts.scad (after the records in bolts/)
 
 // the records of the implemented bolt standards
-DN_BOLTS = [DN_DIN84A, DN_ISO1207, DN_DIN933, DN_ISO4017, DN_DIN912, DN_DIN7380_1, DN_DIN7991, DN_ISO10642];
+DN_BOLTS = [DN_DIN84A, DN_ISO1207, DN_DIN933, DN_ISO4017, DN_DIN912, DN_DIN7380_1, DN_ISO7380_2,
+            DN_DIN7991, DN_ISO10642];
 
 // the canonical names of the implemented bolt standards
 DN_BOLT_STANDARDS = [for (r = DN_BOLTS) r[__DN_STD_NAME]];
@@ -28,6 +29,7 @@ module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false, zet=undef
 // '-> argument 'clearance' added on every side (default 0.1)
 // '-> argument 'teardrop' false (default), true or the face letter the tip points to (the up
 //     direction of the printing, across the hole): the round parts get a teardrop cross-section
+// '-> the dimensions are the maxima of the standard (DN_TOLERANCE_MAX) unless $dn_tolerance is set
 module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
                     sh_off=0, hh_off=0,
                     clearance=0.1, eps=DN_EPS, zet=undef, teardrop=false)

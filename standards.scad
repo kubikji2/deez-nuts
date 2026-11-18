@@ -10,17 +10,20 @@
 //     bolts and screws:
 //       "socket"        cylindrical head with a hexagon socket   [dk, k, s, t]
 //       "button"        button head with a hexagon socket        [dk, k, s, t]
+//       "button-flange" button head with a flange and a socket   [dc, k, s, t, dk, c]
 //       "cheese"        cylindrical head with a slot             [dk, k, n, t]
 //       "hex"           hexagon head                             [s, k]
 //       "countersunk"   countersunk head (90 deg) with a socket  [dk, k, s, t]
-//       "countersunk-z" countersunk head with a cross recess     [dk, k]
+//       "countersunk-z" countersunk head with a Pozidriv recess  [dk, k, pz]
 //     nuts:
 //       "hex"           hexagon nut                              [s, m]
 //       "hex-insert"    hexagon nut with a non-metallic insert   [s, h, m]
 //       "square"        square nut                               [s, m]
 //     where dk is the head diameter, s the width across the flats (of the head, the nut or the
 //     socket), k the head height, m the height of the nut (of its metal part for "hex-insert"),
-//     h the total height, t the depth of the socket or the slot, n the width of the slot
+//     h the total height, t the depth of the socket or the slot, n the width of the slot,
+//     dc the diameter and c the height of a flange (dc comes first: the head diameter of the holes),
+//     pz the size of the Pozidriv recess (1, 2, 3, ...)
 // '-> 'length' what the length of the descriptor measures: "shaft" (under the head) or "total"
 // '-> 'aliases' other names (the ISO name, other spellings)
 // '-> 'deprecated' old names that still work but echo a DEPRECATED message
@@ -73,14 +76,14 @@ function __dn_standard_record(standard, records, ctx) =
 // the sizes (nominal diameters) of a standard
 function deez_nuts_standard_sizes(record) = [for (e = record[__DN_STD_SIZES]) e[0]];
 
-// the dimensions of a size with $dn_tolerance applied, or an error listing the sizes
-function __dn_standard_dims(record, d, ctx, descriptor=undef) =
+// the dimensions of a size with $dn_tolerance (or 'tolerance') applied, or an error listing the sizes
+function __dn_standard_dims(record, d, ctx, descriptor=undef, tolerance=undef) =
     let(row = deez_nuts_find_in_dic(key=d, dic=record[__DN_STD_SIZES]))
     assert(!is_undef(row),
         str("[DEEZ-NUTS:", ctx, "] ", record[__DN_STD_NAME], ": undefined entry for d=", d,
             is_undef(descriptor) ? "" : str(" from descriptor \"", descriptor, "\""),
             ", available: ", deez_nuts_standard_sizes(record)))
-    [for (v = row) deez_nuts_dimension(v)];
+    [for (v = row) deez_nuts_dimension(v, tolerance)];
 
 // the dimensions of a size (undef for an unknown size)
 function deez_nuts_standard_dims(record, d) =

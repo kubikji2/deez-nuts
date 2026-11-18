@@ -21,6 +21,7 @@ include <bolts/DIN933-bolt.scad>
 include <bolts/ISO4017-bolt.scad>
 include <bolts/DIN912-bolt.scad>
 include <bolts/DIN7380-1-bolt.scad>
+include <bolts/ISO7380-2-bolt.scad>
 include <bolts/DIN7991-bolt.scad>
 include <bolts/ISO10642-bolt.scad>
 include <nuts/DIN934-nut.scad>

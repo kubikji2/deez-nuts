@@ -52,6 +52,9 @@ _t_standards = [
     check("DIN7380-1",          deez_nuts_standard("DIN7380-1"),    "DIN7380-1"),
     check("DIN73801",           deez_nuts_standard("DIN73801"),     "DIN7380-1"),
     check("ISO 7380-1",         deez_nuts_standard("ISO 7380-1"),   "DIN7380-1"),
+    check("ISO 7380-2",         deez_nuts_standard("ISO 7380-2"),   "ISO7380-2"),
+    check("DIN 7380-2",         deez_nuts_standard("DIN 7380-2"),   "ISO7380-2"),
+    check("DIN EN ISO 7380-2",  deez_nuts_standard("DIN EN ISO 7380-2"), "ISO7380-2"),
     check("DIN 84 A",           deez_nuts_standard("DIN 84 A"),     "DIN84A"),
     check("DIN 84",             deez_nuts_standard("DIN 84"),       "DIN84A"),
     check("ISO 1207 own table", deez_nuts_standard("ISO 1207"),     "ISO1207"),
@@ -89,6 +92,10 @@ _t_tolerances = [
     check("dims with $dn_tolerance", let($dn_tolerance = "min") deez_nuts_standard_dims(DN_DIN912, 3)[0], 5.32),
     check("dims nominal",       deez_nuts_standard_dims(DN_DIN912, 3), [5.5, 3, 2.5, 1.3]),
     check("dims unknown size",  deez_nuts_standard_dims(DN_DIN912, 7), undef),
+    check("holes default to max", deez_nuts_hole_tolerance(), DN_TOLERANCE_MAX),
+    check("holes follow $dn_tolerance", let($dn_tolerance = DN_TOLERANCE_NOMINAL) deez_nuts_hole_tolerance(),
+          DN_TOLERANCE_NOMINAL),
+    check("hole dims", __dn_standard_dims(DN_DIN912, 3, "T", tolerance=deez_nuts_hole_tolerance()), [5.68, 3, 2.5, 1.3]),
 ];
 
 _t_teardrops = [

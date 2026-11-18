@@ -134,6 +134,12 @@ function deez_nuts_dimension(v, tolerance=undef) =
     t == DN_TOLERANCE_MIN ? v[0] : t == DN_TOLERANCE_MAX ? v[2] : v[1];
 
 
+// the tolerance of the holes: $dn_tolerance when it is set, otherwise DN_TOLERANCE_MAX (a hole made
+// for the largest part of the standard; the clearance only compensates the printing)
+function deez_nuts_hole_tolerance() =
+    is_undef($dn_tolerance) ? DN_TOLERANCE_MAX : $dn_tolerance;
+
+
 // ---------------------------------------------------------------------------- teardrops
 
 // __private__ the direction of a face letter (lower case: the negative side, as solidpp)

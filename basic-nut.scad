@@ -25,15 +25,27 @@ function __dn_nut_width(d, D, fn, ctx) =
 // '-> argument 'align' is nut alignment (DN_ALIGN_BOTTOM, DN_ALIGN_MIDDLE, DN_ALIGN_TOP)
 // '-> argument 'visual' adds the hole
 // '-> argument 'zet' defines the axis of the nut: "z" (default), "x" or "y" (as solidpp)
-module basic_nut(d=undef, D=undef, h=undef, r=undef, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
+// '-> argument 'chamfer' "t", "b", "tb": the 30 deg chamfer of the corners (illustrative, not for holes)
+module basic_nut(d=undef, D=undef, h=undef, r=undef, align=DN_ALIGN_BOTTOM, visual=false, zet=undef,
+                 chamfer=undef)
 {
     _w = __dn_nut_width(d, D, 6, "basic-nut");
     _align = __dn_nut_align(align, "basic-nut");
+    _z0 = align == DN_ALIGN_BOTTOM ? 0 : align == DN_ALIGN_TOP ? -h : -h/2;
 
     rotate(deez_nuts_zet_rotation(zet, "DEEZ-NUTS:basic-nut"))
     difference()
     {
-        cylinderpp(d=_w, h=h, align=_align, fn=6, polygon="flats");
+        // NOTE: no intersection() with a false if(): an empty child would empty it
+        if (!is_undef(chamfer))
+            intersection()
+            {
+                cylinderpp(d=_w, h=h, align=_align, fn=6, polygon="flats");
+                translate([0, 0, _z0])
+                    __dn_corner_chamfer(_w, h, 6, "flats", chamfer);
+            }
+        else
+            cylinderpp(d=_w, h=h, align=_align, fn=6, polygon="flats");
 
         if(visual)
         {
@@ -173,7 +185,7 @@ module basic_insert_nut(d, h, m, r=undef, align=DN_ALIGN_BOTTOM, visual=false, z
     {
         if (!visual)
         {
-            basic_nut(d=d, h=h, align=DN_ALIGN_BOTTOM);
+            basic_nut(d=d, h=h, align=DN_ALIGN_BOTTOM, chamfer="b");
         }
         else
         {
@@ -181,7 +193,7 @@ module basic_insert_nut(d, h, m, r=undef, align=DN_ALIGN_BOTTOM, visual=false, z
             {
                 union()
                 {
-                    basic_nut(d=d, h=m, align=DN_ALIGN_BOTTOM);
+                    basic_nut(d=d, h=m, align=DN_ALIGN_BOTTOM, chamfer="b");
                     // the insert housing: a round collar of the rest of the height
                     translate([0, 0, m - DN_EPS])
                         cylinderpp(d=0.95*d, h=h - m + DN_EPS, align="z", mod_list=[rounding(min(0.4*(h - m), 0.1*d), "to")]);
@@ -223,17 +235,18 @@ module deez_nuts_nut(record, d, align=DN_ALIGN_BOTTOM, visual=false, zet=undef, 
     else if (_shape == "hex-insert")
         basic_insert_nut(d=_dims[0], h=_dims[1], m=_dims[2], r=_d/2, align=align, visual=visual, zet=zet);
     else
-        basic_nut(d=_dims[0], h=_dims[1], r=_d/2, align=align, visual=visual, zet=zet);
+        basic_nut(d=_dims[0], h=_dims[1], r=_d/2, align=align, visual=visual, zet=zet, chamfer="tb");
 }
 
 
 // a nut hole of a standard record; used by nut_hole()
 // '-> a nut with an insert gets the hole of its total height
+// '-> the dimensions are the maxima of the standard unless $dn_tolerance is set
 module deez_nuts_nut_hole(  record, d, align=DN_ALIGN_BOTTOM, s_off=0, h_off=0,
                             clearance=0.1, h_clearance=undef, zet=undef, teardrop=false, ctx="NUT-HOLE")
 {
     _d = deez_nuts_nut_diameter(d, str("DEEZ-NUTS:", ctx));
-    _dims = __dn_standard_dims(record, _d, ctx);
+    _dims = __dn_standard_dims(record, _d, ctx, tolerance=deez_nuts_hole_tolerance());
 
     if (record[__DN_STD_SHAPE] == "square")
         basic_square_nut_hole(d=_dims[0], h=_dims[1], align=align, h_off=h_off, s_off=s_off,

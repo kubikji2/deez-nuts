@@ -28,6 +28,7 @@ module nut(d, standard, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
 // '-> argument 'h_clearance' the clearance along the axis (default 'clearance')
 // '-> argument 'teardrop' false (default), true or the face letter of the up direction of the
 //     printing (across the axis): a corner of the hexagon points up (square nuts: no effect)
+// '-> the dimensions are the maxima of the standard (DN_TOLERANCE_MAX) unless $dn_tolerance is set
 module nut_hole(d, standard, align=DN_ALIGN_BOTTOM, s_off=0,
                 h_off=0, clearance=0.1, h_clearance=undef, zet=undef, teardrop=false)
     deez_nuts_nut_hole(__dn_standard_record(standard, DN_NUTS, "NUT-HOLE"), d,

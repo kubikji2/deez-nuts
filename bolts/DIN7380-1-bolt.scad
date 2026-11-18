@@ -1,5 +1,6 @@
 // DIN EN ISO 7380-1: hexagon socket button head screw; the length is the length of the shaft
 // NOTE: included by deez-nuts.scad
+// NOTE: DIN EN ISO 7380-1 (11/2011) superseded DIN 7380 (05/2004); with a flange: ISO7380-2-bolt.scad
 //
 // sources:
 // - DIN EN ISO 7380-1:2011 (M3 to M16): https://fasten.it/Norms/Norm/DIN_EN_ISO_7380-1
@@ -7,7 +8,7 @@
 //   https://westfieldfasteners.co.uk/Standards/ScrewBolt-SHBtn-M.pdf
 DN_DIN7380_1 = dn_standard(
     name = "DIN7380-1", kind = "bolt", shape = "button", length = "shaft",
-    aliases = ["ISO7380-1", "ISO7380", "DIN7380"],
+    aliases = ["ISO7380-1", "ISO7380", "DIN7380", "DIN EN ISO 7380-1"],
     sizes = [
     //   d       dk (head diameter)        k (head height)        s (socket)  t (socket depth, min)
         [ 2.5, [  4.50,                    1.50,                   1.5,        undef]],

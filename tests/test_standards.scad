@@ -16,8 +16,8 @@ function check(name, got, expected, eps=1e-6) =
     true;
 
 // the number of columns of each shape
-_columns = [["socket", 4], ["button", 4], ["cheese", 4], ["hex", 2], ["countersunk", 4],
-            ["countersunk-z", 2], ["hex-insert", 3], ["square", 2]];
+_columns = [["socket", 4], ["button", 4], ["button-flange", 6], ["cheese", 4], ["hex", 2], ["countersunk", 4],
+            ["countersunk-z", 3], ["hex-insert", 3], ["square", 2]];
 
 // a valid dimension: a positive number, or [min, nominal, max] with 0 < min <= nominal <= max
 function __t_dim_ok(v) =
@@ -35,6 +35,9 @@ function __t_row_problems(r, row) =
         if (deez_nuts_dimension(c[0], DN_TOLERANCE_MIN) <= d) "the head (nut) is not wider than d",
         if (r[__DN_STD_SHAPE] == "hex-insert" && deez_nuts_dimension(c[2]) > deez_nuts_dimension(c[1], DN_TOLERANCE_MIN))
             "the metal part is higher than the nut",
+        if (r[__DN_STD_SHAPE] == "button-flange" && (deez_nuts_dimension(c[4], DN_TOLERANCE_MAX) >= deez_nuts_dimension(c[0], DN_TOLERANCE_MIN)
+                                                     || deez_nuts_dimension(c[5], DN_TOLERANCE_MAX) >= deez_nuts_dimension(c[1], DN_TOLERANCE_MIN)))
+            "the button is wider than the flange, or the flange higher than the head",
     ];
 
 // ------------------------------------------------------------------ records
@@ -103,6 +106,13 @@ _t_values = [
     check("ISO4032 M8 height", get_nut_height(8, "ISO4032"), 6.8),
     check("DIN7991 M3 head", get_bolt_head_diameter("M3x10", "DIN7991"), 6),
     check("ISO10642 M3 head", get_bolt_head_diameter("M3x10", "ISO10642"), 6.72),
+    check("ISO7380-2 M3 head (flange)", get_bolt_head_diameter("M3x10", "ISO7380-2"), 6.9),
+    check("DIN7380-2 = ISO7380-2", get_bolt_head_height("M3x10", "DIN 7380-2"), 1.65),
+    check("ISO7380-2 sizes", deez_nuts_standard_sizes(DN_ISO7380_2), [3, 4, 5, 6, 8, 10, 12]),
+    check("DIN7505 Pozidriv sizes known",
+          [for (row = DN_DIN7505[__DN_STD_SIZES]) if (is_undef(deez_nuts_find_in_dic(row[1][2], DN_POZIDRIV))) row[0]], []),
+    check("Pozidriv recess fits the head (top diameter)",
+          [for (row = DN_DIN7505[__DN_STD_SIZES]) if (deez_nuts_find_in_dic(row[1][2], DN_POZIDRIV)[0] >= deez_nuts_dimension(row[1][0], DN_TOLERANCE_MIN)) row[0]], []),
     check("min", let($dn_tolerance = DN_TOLERANCE_MIN) get_bolt_head_height("M3x10", "DIN912"), 2.86),
     check("max", let($dn_tolerance = DN_TOLERANCE_MAX) get_bolt_head_diameter("M3x10", "DIN912"), 5.68),
     check("ISO name of a bolt", get_bolt_head_height("M3x10", "ISO 4762"), get_bolt_head_height("M3x10", "DIN912")),
