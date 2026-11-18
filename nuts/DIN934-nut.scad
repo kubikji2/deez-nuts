@@ -3,7 +3,8 @@ include <../utils.scad>
 include <../basic-nut.scad>
 
 
-// TODO add all dimensions
+// DIN 934 (ISO 4032): hexagon nut
+// TODO verify the values against the standard, add all dimensions
 // dictionary to convert the shaft diameter to the nut params
 // based on: https://www.dingfastener.com/din-934/
 //           https://www.fasteners.eu/standards/DIN/934/
@@ -15,36 +16,39 @@ DIN934_DIC = [  [ 2.0,   [ 4.0,  1.6]],
                 [ 5.0,   [ 8.0,  4.0]],
                 [ 6.0,   [10.0,  5.0]],
                 [10.0,   [16.9,  8.0]]];
-//                        |     '-> nut height 
+//                        |     '-> nut height
 //                        '-> width (side-to-side)
 
 
 // DIN934 nut
-module DIN934_nut(d, align=DN_ALIGN_BOTTOM, visual=false)
+// '-> argument 'd' the size: a number (3) or a descriptor ("M3", or the bolt "M3x10")
+// '-> argument 'align' DN_ALIGN_BOTTOM (default), DN_ALIGN_MIDDLE or DN_ALIGN_TOP
+// '-> argument 'visual' adds the hole
+// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
+module DIN934_nut(d, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
 {
+    _d = deez_nuts_nut_diameter(d, "DEEZ-NUTS:DIN934-nut");
 
     // parserd dic data
-    _dic_data = deez_nuts_find_in_dic(key=d, dic=DIN934_DIC);
-    assert (!is_undef(_dic_data),
-            str("[DEEZ-NUTS:DIN934-nut] undefined entry for d=", d, "!"));
+    _dic_data = __dn_table_entry(_d, DIN934_DIC, "DIN934-nut");
     hd = _dic_data[0];
     hh = _dic_data[1];
 
     // construct model
-    basic_nut(d=hd, h=hh, r=d/2, align=align, visual=visual);
+    basic_nut(d=hd, h=hh, r=_d/2, align=align, visual=visual, zet=zet);
 
 }
 
 
 // DIN934 nut hole
-module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0, 
-                        h_off=0, clearance=0.1, h_clearance=undef)
+// '-> argument 'h_off' the vertical access hole below the nut, 's_off' the side slot towards +x
+module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
+                        h_off=0, clearance=0.1, h_clearance=undef, zet=undef)
 {
+    _d = deez_nuts_nut_diameter(d, "DEEZ-NUTS:DIN934-nut-hole");
 
     // parserd dic data
-    _dic_data = deez_nuts_find_in_dic(key=d, dic=DIN934_DIC);
-    assert (!is_undef(_dic_data),
-            str("[DEEZ-NUTS:DIN934-nut-hole] undefined entry for d=", d, "!"));
+    _dic_data = __dn_table_entry(_d, DIN934_DIC, "DIN934-nut-hole");
     hd = _dic_data[0];
     hh = _dic_data[1];
 
@@ -52,12 +56,13 @@ module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
     basic_nut_hole( d=hd, h=hh, align=align,
                     h_off=h_off, s_off=s_off,
                     clearance=clearance,
-                    h_clearance=h_clearance);
+                    h_clearance=h_clearance, zet=zet);
 
 }
 
 
 // DIN934 get diameter
+// '-> is_circumscribed=true: the diameter across the corners, false: the width across the flats
 function DIN934_get_diameter(d, is_circumscribed) =
     let(diameter=basic_nut_get_diameter(d=d, dic=DIN934_DIC))
     is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 6) : diameter;
