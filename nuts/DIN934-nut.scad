@@ -1,73 +1,21 @@
-include <../constants.scad>
-include <../utils.scad>
-include <../basic-nut.scad>
-
-
-// DIN 934 (ISO 4032): hexagon nut
-// TODO verify the values against the standard, add all dimensions
-// dictionary to convert the shaft diameter to the nut params
-// based on: https://www.dingfastener.com/din-934/
-//           https://www.fasteners.eu/standards/DIN/934/
-//           https://www.beaconcorporation.co.uk/products/nuts/din934-dimensions/
-DIN934_DIC = [  [ 2.0,   [ 4.0,  1.6]],
-                [ 2.5,   [ 5.0,  2.0]],
-                [ 3.0,   [ 5.5,  2.4]],
-                [ 4.0,   [ 7.0,  3.2]],
-                [ 5.0,   [ 8.0,  4.0]],
-                [ 6.0,   [10.0,  5.0]],
-                [10.0,   [16.9,  8.0]]];
-//                        |     '-> nut height
-//                        '-> width (side-to-side)
-
-
-// DIN934 nut
-// '-> argument 'd' the size: a number (3) or a descriptor ("M3", or the bolt "M3x10")
-// '-> argument 'align' DN_ALIGN_BOTTOM (default), DN_ALIGN_MIDDLE or DN_ALIGN_TOP
-// '-> argument 'visual' adds the hole
-// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
-module DIN934_nut(d, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    _d = deez_nuts_nut_diameter(d, "DEEZ-NUTS:DIN934-nut");
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(_d, DIN934_DIC, "DIN934-nut");
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_nut(d=hd, h=hh, r=_d/2, align=align, visual=visual, zet=zet);
-
-}
-
-
-// DIN934 nut hole
-// '-> argument 'h_off' the vertical access hole below the nut, 's_off' the side slot towards +x
-module DIN934_nut_hole( d, align=DN_ALIGN_BOTTOM, s_off=0,
-                        h_off=0, clearance=0.1, h_clearance=undef, zet=undef)
-{
-    _d = deez_nuts_nut_diameter(d, "DEEZ-NUTS:DIN934-nut-hole");
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(_d, DIN934_DIC, "DIN934-nut-hole");
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_nut_hole( d=hd, h=hh, align=align,
-                    h_off=h_off, s_off=s_off,
-                    clearance=clearance,
-                    h_clearance=h_clearance, zet=zet);
-
-}
-
-
-// DIN934 get diameter
-// '-> is_circumscribed=true: the diameter across the corners, false: the width across the flats
-function DIN934_get_diameter(d, is_circumscribed) =
-    let(diameter=basic_nut_get_diameter(d=d, dic=DIN934_DIC))
-    is_circumscribed ? deez_nutz_polygon_width_to_circumscribed_diameter(diameter, 6) : diameter;
-
-
-// DIN934 get height
-function DIN934_get_height(d) =
-    basic_nut_get_height(d=d, dic=DIN934_DIC);
+// DIN 934: hexagon nut
+// NOTE: included by deez-nuts.scad
+// NOTE: ISO 4032 differs from M5 (heights) and in M10 and M12 (widths): see ISO4032-nut.scad
+//
+// sources:
+// - DIN 934 (withdrawn, replaced by ISO 4032): https://westfieldfasteners.co.uk/Standards/Nut-Hex-M.pdf
+DN_DIN934 = dn_standard(
+    name = "DIN934", kind = "nut", shape = "hex",
+    sizes = [
+    //   d       s (across the flats)      m (height)
+        [ 2.0, [[ 3.82,  4.00,  4.00],   [ 1.35,  1.60,  1.60]]],
+        [ 2.5, [[ 4.82,  5.00,  5.00],   [ 1.75,  2.00,  2.00]]],
+        [ 3.0, [[ 5.32,  5.50,  5.50],   [ 2.15,  2.40,  2.40]]],
+        [ 4.0, [[ 6.78,  7.00,  7.00],   [ 2.90,  3.20,  3.20]]],
+        [ 5.0, [[ 7.78,  8.00,  8.00],   [ 3.70,  4.00,  4.00]]],
+        [ 6.0, [[ 9.78, 10.00, 10.00],   [ 4.70,  5.00,  5.00]]],
+        [ 8.0, [[12.73, 13.00, 13.00],   [ 6.14,  6.50,  6.50]]],
+        [10.0, [[16.73, 17.00, 17.00],   [ 7.64,  8.00,  8.00]]],
+        [12.0, [[18.67, 19.00, 19.00],   [ 9.64, 10.00, 10.00]]]
+    ],
+    source = ["https://westfieldfasteners.co.uk/Standards/Nut-Hex-M.pdf"]);

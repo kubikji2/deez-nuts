@@ -1,6 +1,6 @@
 # Deez Nutz - bolts, nuts, screws and threads OpenSCAD repository
 
-Bolts, nuts and screws, and the holes for them, from the name of their standard and a descriptor such as `"M3x20"`, the way you would say it. Built on solidpp (a git submodule in `solidpp/`).
+Bolts, nuts and screws, and the holes for them, from the name of their standard and a descriptor such as `"M3x20"`, the way you would say it. The dimensions come from the standards (M2 to M12, M2.5 included), and every table names its sources. Built on solidpp (a git submodule in `solidpp/`).
 
 ```openscad
 include <deez-nuts/deez-nuts.scad>
@@ -14,58 +14,113 @@ difference()
 }
 ```
 
+`deez-nuts.scad` includes everything once, solidpp too, so `cubepp`, `cylinderpp` and the other solidpp modules are available in your design. The files in `bolts/`, `nuts/` and `screws/` are not meant to be included on their own.
+
 ## Standards
 
-| kind  | standard    | ISO name    | constant               | the length in the descriptor |
-|-------|-------------|-------------|------------------------|------------------------------|
-| bolt  | `DIN84A`    | `ISO1207`   | `DN_BOLT_SLOTTED_HEAD` | shaft                        |
-| bolt  | `DIN933`    | `ISO4017`   | `DN_BOLT_HEX_HEAD`     | shaft                        |
-| bolt  | `DIN912`    | `ISO4762`   | `DN_BOLT_SOCKET_HEAD`  | shaft                        |
-| bolt  | `DIN7380-1` | `ISO7380-1` | `DN_BOLT_BUTTON_HEAD`  | shaft                        |
-| bolt  | `DIN7991`   | `ISO10642`  | `DN_BOLT_COUNTERSINK`  | total (with the head)        |
-| screw | `LUXPZ`     | -           | `DN_SCREW_POZIDRIV`    | total (with the head)        |
-| nut   | `DIN934`    | `ISO4032`   | `DN_NUT_REGULAR`       | -                            |
-| nut   | `DIN439`    | `ISO4035`   | `DN_NUT_THIN`          | -                            |
-| nut   | `DIN985`    | `ISO10511`  | `DN_NUT_NYLOCK`        | -                            |
-| nut   | `DIN562`    | -           | `DN_NUT_SQUARE`        | -                            |
+| kind  | standard    | also accepted                      | constant               | sizes      | length in the descriptor |
+|-------|-------------|------------------------------------|------------------------|------------|--------------------------|
+| bolt  | `DIN912`    | `ISO4762`                          | `DN_BOLT_SOCKET_HEAD`  | M2 - M12   | shaft                    |
+| bolt  | `DIN933`    |                                    | `DN_BOLT_HEX_HEAD`     | M2 - M12   | shaft                    |
+| bolt  | `ISO4017`   |                                    |                        | M2 - M12   | shaft                    |
+| bolt  | `DIN7380-1` | `ISO7380-1`, `ISO7380`, `DIN73801` | `DN_BOLT_BUTTON_HEAD`  | M2.5 - M12 | shaft                    |
+| bolt  | `DIN7991`   |                                    | `DN_BOLT_COUNTERSINK`  | M3 - M12   | total (with the head)    |
+| bolt  | `ISO10642`  |                                    |                        | M2 - M12   | total (with the head)    |
+| bolt  | `DIN84A`    | `DIN84`                            | `DN_BOLT_SLOTTED_HEAD` | M2 - M10   | shaft                    |
+| bolt  | `ISO1207`   |                                    |                        | M2 - M10   | shaft                    |
+| screw | `DIN7505`   | `LUXPZ` (deprecated)               | `DN_SCREW_POZIDRIV`    | 3 - 6      | total (with the head)    |
+| nut   | `DIN934`    |                                    | `DN_NUT_REGULAR`       | M2 - M12   |                          |
+| nut   | `ISO4032`   |                                    |                        | M2 - M12   |                          |
+| nut   | `DIN439`    | `DIN439B`, `DIN439-2`              | `DN_NUT_THIN`          | M2 - M12   |                          |
+| nut   | `ISO4035`   |                                    |                        | M2 - M12   |                          |
+| nut   | `DIN985`    |                                    | `DN_NUT_NYLOCK`        | M2 - M12   |                          |
+| nut   | `ISO10511`  |                                    |                        | M3 - M12   |                          |
+| nut   | `DIN562`    |                                    | `DN_NUT_SQUARE`        | M2 - M10   |                          |
 
 - The names are case-insensitive, and spaces, dashes, dots and underscores are ignored: `"ISO 4762"`, `"iso4762"` and `"DIN-912"` all work.
-- The ISO names use the DIN tables for now. Where the standards differ (e.g. the width across the flats of M10 and M12 hex heads and nuts), the ISO standards will get their own tables.
-- The tables are being reworked to follow the standards for M2–M12; until then, check the sizes you use.
+- Where a DIN standard and its ISO successor differ, each has its own table: e.g. the hex heads and nuts of M10 and M12 (17 and 19 across the flats in DIN, 16 and 18 in ISO), the heights of `DIN934` and `ISO4032` nuts from M5, the larger countersunk heads of `ISO10642`. `ISO4762` and `ISO7380-1` have the same values as their DIN names.
+- Sizes outside a standard come from a manufacturer and are marked in the table: `DIN7380-1` M2.5, `DIN985` M2 and M2.5.
+- `DIN7505` (chipboard screws, e.g. the universal Pozidriv wood screws) is withdrawn, and the screws follow the manufacturers' drawings; check your screws.
 
 ## Descriptors
 
-- Bolts and screws: `"M<d>x<length>"`, e.g. `"M3x20"`, `"M2.5x10"` (case-insensitive, `"m3X20"` works too).
+- Bolts and screws: `"M<d>x<length>"`, e.g. `"M3x20"`, `"M2.5x10"` (case-insensitive, `"m3X20"` works too). The length is measured as the standard does: under the head, or the total length for countersunk heads (see the table).
 - Nuts: a number (`3`), `"M3"`, or the descriptor of the bolt (`"M3x20"`): a nut for the bolt M3x20.
+
+## Tolerances
+
+The standards give most dimensions as a range. The tables keep `[min, nominal, max]`, and `$dn_tolerance` selects the value: `DN_TOLERANCE_NOMINAL` (default), `DN_TOLERANCE_MIN` or `DN_TOLERANCE_MAX`. Set it globally or for one call:
+
+```openscad
+$dn_tolerance = DN_TOLERANCE_MAX;                                       // everything
+bolt_hole("M3x16", "DIN912", $dn_tolerance=DN_TOLERANCE_MAX);           // one hole
+```
+
+Where the standard gives one value (e.g. the maximum head height of a countersunk head), that value is used for all three.
 
 ## Modules
 
 ```openscad
 bolt(descriptor, standard, align, visual, zet)
-bolt_hole(descriptor, standard, align, sh_off, hh_off, clearance, eps, zet)
+bolt_hole(descriptor, standard, align, sh_off, hh_off, clearance, eps, zet, teardrop)
 screw(descriptor, standard, align, visual, zet)
-screw_hole(descriptor, standard, align, sh_off, hh_off, clearance, eps, zet)
+screw_hole(descriptor, standard, align, sh_off, hh_off, clearance, eps, zet, teardrop)
 nut(d, standard, align, visual, zet)
-nut_hole(d, standard, align, s_off, h_off, clearance, h_clearance, zet)
+nut_hole(d, standard, align, s_off, h_off, clearance, h_clearance, zet, teardrop)
 ```
 
-| argument      | meaning                                                                                          |
-|---------------|--------------------------------------------------------------------------------------------------|
-| `align`       | the point at z = 0: `DN_ALIGN_BOTTOM` (default), `DN_ALIGN_MIDDLE` or `DN_ALIGN_TOP` (see below) |
-| `zet`         | the axis, as in solidpp: `"z"` (default), `"x"` or `"y"`; the head points towards +`zet`         |
-| `visual`      | details for pictures (the socket of `DIN912`, the hole of a nut, the nylon ring of `DIN985`)     |
-| `clearance`   | added on every side of the hole (default 0.1); for hex nuts it is measured across the flats      |
-| `h_clearance` | the clearance of a nut hole along its axis (default `clearance`)                                 |
-| `sh_off`      | extends the hole of the shaft beyond its end                                                     |
-| `hh_off`      | extends the hole of the head above it (to sink the head)                                         |
-| `s_off`       | a side slot of the nut hole towards +x, to insert the nut from the side                          |
-| `h_off`       | an access hole below the nut hole                                                                |
+| argument      | meaning                                                                                     |
+|---------------|---------------------------------------------------------------------------------------------|
+| `align`       | the point at z = 0: `DN_ALIGN_BOTTOM` (default), `DN_ALIGN_MIDDLE` or `DN_ALIGN_TOP`        |
+| `zet`         | the axis, as in solidpp: `"z"` (default), `"x"` or `"y"`; the head points towards +`zet`    |
+| `visual`      | details for pictures (the socket, the slot, the hole of a nut, the insert of `DIN985`)      |
+| `clearance`   | added on every side of the hole (default 0.1); for hex nuts it is measured across the flats |
+| `h_clearance` | the clearance of a nut hole along its axis (default `clearance`)                            |
+| `sh_off`      | extends the hole of the shaft beyond its end                                                |
+| `hh_off`      | extends the hole of the head above it (to sink the head)                                    |
+| `s_off`       | a side slot of the nut hole towards +x, to insert the nut from the side                     |
+| `h_off`       | an access hole below the nut hole                                                           |
+| `teardrop`    | holes printable without supports when horizontal in the printed part, see below             |
 
 For bolts and screws, `DN_ALIGN_BOTTOM` puts the end of the shaft at z = 0, `DN_ALIGN_MIDDLE` the bottom of the head and `DN_ALIGN_TOP` the top of the head; for nuts, the bottom, the middle or the top of the nut.
 
-The functions `get_bolt_head_diameter(descriptor, standard, is_circumscribed)`, `get_bolt_head_height(descriptor, standard)`, `get_screw_head_diameter(...)`, `get_screw_head_height(...)`, `get_nut_diameter(d, standard, is_circumscribed)` and `get_nut_height(d, standard)` return the sizes (undef for an unknown standard or size). `is_circumscribed=true` gives the diameter across the corners of a hexagon or a square, `false` the width across the flats.
+### Teardrops
+
+A hole that lies horizontally in the printed part sags at the top. `teardrop` gives the round parts of a bolt or screw hole (the shaft, a round head, a countersunk head) a teardrop cross-section with its tip upwards; a hex nut hole is turned so that a corner points upwards.
+
+- `teardrop=true`: the tip points to +Z (the hole must be horizontal: `zet="x"` or `"y"`).
+- `teardrop="Y"` (any face letter `x`, `X`, `y`, `Y`, `z`, `Z` across the hole): the tip points that way. Use it when the part is printed in another orientation than it is modelled, e.g. a vertical hole (`zet="z"`) of a part printed lying on its side.
+- Hexagonal heads keep their shape; square nuts ignore it.
+
+### Functions
+
+`get_bolt_head_diameter(descriptor, standard, is_circumscribed)`, `get_bolt_head_height(descriptor, standard)`, `get_screw_head_diameter(...)`, `get_screw_head_height(...)`, `get_nut_diameter(d, standard, is_circumscribed)` and `get_nut_height(d, standard)` return the sizes with `$dn_tolerance` applied (undef for an unknown standard or size). `is_circumscribed=true` gives the diameter across the corners of a hexagon or a square, `false` the width across the flats. The height of a nut with an insert is its total height.
+
+## Adding a standard
+
+Each standard is one file in `bolts/`, `nuts/` or `screws/` with one record, e.g.:
+
+```openscad
+DN_DIN912 = dn_standard(
+    name = "DIN912", kind = "bolt", shape = "socket", length = "shaft",
+    aliases = ["ISO4762"],
+    sizes = [
+    //   d       dk (head diameter)        k (head height)        s (socket)  t (socket depth, min)
+        [ 3.0, [[ 5.32,  5.50,  5.68],   [ 2.86,  3.00,  3.00],    2.5,        1.3]],
+        ...
+    ],
+    source = ["https://..."]);
+```
+
+- `shape` decides the geometry and the columns of `sizes` (see `standards.scad`): bolts and screws `"socket"`, `"button"`, `"cheese"`, `"countersunk"` with `[dk, k, drive, depth]`, `"hex"` and `"countersunk-z"` with `[head, k]`; nuts `"hex"` and `"square"` with `[s, m]`, `"hex-insert"` with `[s, h, m]`.
+- A dimension is a number or `[min, nominal, max]`; an unknown detail (only for the drive columns) is `undef`.
+- Include the file in `deez-nuts.scad` and add the record to the list in `bolts.scad`, `nuts.scad` or `screws.scad`; `tests/test_standards.scad` checks every record.
+
+## Deprecated
+
+The modules, functions and tables of the single standards (`DIN912_bolt`, `DIN934_nut_hole`, `DIN933_get_head_diameter`, `DIN912_DIC`, ...) still work and echo their replacement, e.g. `DIN912_bolt(descriptor, ...) -> use bolt(descriptor, "DIN912", ...)`. The standard `"LUXPZ"` is now `"DIN7505"`.
 
 ## Tests
 
-- `tests/test_*.scad`: assert-based tests of the descriptors, the standards and the tables; run e.g. `openscad -o /tmp/out.echo tests/test_utils.scad`, the last line must be `ECHO: "ALL TESTS PASSED"`.
+- `tests/test_*.scad`: assert-based tests of the descriptors, the standards and the records; run e.g. `openscad -o /tmp/out.echo tests/test_standards.scad`, the last line must be `ECHO: "ALL TESTS PASSED"`.
 - `tests/gallery_*.scad`: every standard in every size, and the holes cut into blocks; render them (F6) to check that every part is a valid manifold.

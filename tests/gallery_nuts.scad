@@ -4,19 +4,19 @@
 include<../deez-nuts.scad>
 $fa = 6; $fs = 0.3;
 
-_rows = [["DIN439", DIN439_DIC], ["DIN562", DIN562_DIC], ["DIN934", DIN934_DIC], ["DIN985", DIN985_DIC]];
-
-for (i = [0:len(_rows)-1])
-    for (j = [0:len(_rows[i][1])-1])
-        translate([j*20, i*20, 0])
-            nut(_rows[i][1][j][0], _rows[i][0], visual=true);
+for (i = [0:len(DN_NUTS)-1])
+    let(r = DN_NUTS[i], sizes = deez_nuts_standard_sizes(r))
+        for (j = [0:len(sizes)-1])
+            translate([j*25, i*25, 0])
+                nut(sizes[j], r[__DN_STD_NAME], visual=true);
 
 // align, zet and descriptors
-translate([0, -20, 0])
+translate([0, -25, 0])
 {
     nut("M3", "DIN934", align=DN_ALIGN_BOTTOM);
     translate([10, 0, 0]) nut("M3", "DIN934", align=DN_ALIGN_MIDDLE);
     translate([20, 0, 0]) nut("M3x10", "DIN934", align=DN_ALIGN_TOP);
     translate([35, 0, 0]) nut("M3", "ISO 4032", zet="x");
     translate([50, 0, 0]) nut("M3", "DIN562", zet="y", visual=true);
+    translate([65, 0, 0]) nut("M3", "DIN985", zet="x", visual=true);
 }

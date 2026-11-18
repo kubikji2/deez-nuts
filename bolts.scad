@@ -1,127 +1,51 @@
-// include constants for align values
-include<constants.scad>
+// bolts: the list of the implemented standards and the modules and functions for all of them
+// NOTE: included by deez-nuts.scad (after the records in bolts/)
 
-// include utils for diampeter parsin
-include<utils.scad>
+// the records of the implemented bolt standards
+DN_BOLTS = [DN_DIN84A, DN_ISO1207, DN_DIN933, DN_ISO4017, DN_DIN912, DN_DIN7380_1, DN_DIN7991, DN_ISO10642];
 
-include<bolts/DIN84A-bolt.scad>
-include<bolts/DIN933-bolt.scad>
-include<bolts/DIN912-bolt.scad>
-include<bolts/DIN7380-1-bolt.scad>
-include<bolts/DIN7991-bolt.scad>
-
-// the implemented bolt standards (canonical names; see deez_nuts_standard() for the aliases)
-DN_BOLT_STANDARDS = ["DIN84A", "DIN933", "DIN912", "DIN7380-1", "DIN7991"];
-
-// __private__ the canonical name of a bolt standard, or an error listing the implemented ones
-function __dn_bolt_standard(standard, ctx) =
-    let(s = deez_nuts_standard(standard))
-    assert(!is_undef(s) && len([for (b = DN_BOLT_STANDARDS) if (b == s) b]) > 0,
-        str("[", ctx, "] standard: ", standard, " is not implemented! Available: ", DN_BOLT_STANDARDS,
-            " (and their ISO names)"))
-    s;
+// the canonical names of the implemented bolt standards
+DN_BOLT_STANDARDS = [for (r = DN_BOLTS) r[__DN_STD_NAME]];
 
 
-// parse avaliable bolts
-// '-> argument 'descriptor' e.g. "M3x20"
-// '-> argument 'standard' e.g. "DIN912" or its ISO name "ISO4762" (spaces and dashes are ignored)
-// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
+// a bolt
+// '-> argument 'descriptor' e.g. "M3x20" (the length as the standard measures it, see the README)
+// '-> argument 'standard' e.g. "DIN912" or "ISO 4762" (case, spaces and dashes are ignored)
+// '-> argument 'align' DN_ALIGN_BOTTOM (the end of the shaft at z = 0, default), DN_ALIGN_MIDDLE
+//     (the bottom of the head) or DN_ALIGN_TOP (the top of the head)
+// '-> argument 'visual' adds details for pictures (the socket, the slot)
+// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp); the head points towards +zet
+// '-> the dimensions follow $dn_tolerance (DN_TOLERANCE_NOMINAL by default)
 module bolt(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    _s = __dn_bolt_standard(standard, "BOLT");
-    if (_s == "DIN84A")
-    {
-        DIN84A_bolt(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-    else if(_s == "DIN933")
-    {
-        DIN933_bolt(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-    else if(_s == "DIN912")
-    {
-        DIN912_bolt(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-    else if (_s == "DIN7380-1")
-    {
-        DIN73801_bolt(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-    else if (_s == "DIN7991")
-    {
-        DIN7991_bolt(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-}
+    deez_nuts_fastener(__dn_standard_record(standard, DN_BOLTS, "BOLT"), descriptor,
+                       align=align, visual=visual, zet=zet, ctx="BOLT");
 
 
-// parse avaliable bolts
+// a hole for a bolt
+// '-> arguments as for bolt(), and:
+// '-> argument 'sh_off' extends the hole of the shaft beyond its end
+// '-> argument 'hh_off' extends the hole of the head above it (to sink the head)
+// '-> argument 'clearance' added on every side (default 0.1)
+// '-> argument 'teardrop' false (default), true or the face letter the tip points to (the up
+//     direction of the printing, across the hole): the round parts get a teardrop cross-section
 module bolt_hole(   descriptor, standard, align=DN_ALIGN_BOTTOM,
                     sh_off=0, hh_off=0,
-                    clearance=0.1, eps=DN_EPS, zet=undef)
-{
-    _s = __dn_bolt_standard(standard, "BOLT-HOLE");
-    if (_s == "DIN84A")
-    {
-        DIN84A_bolt_hole(   descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-    else if(_s == "DIN933")
-    {
-        DIN933_bolt_hole(   descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-    else if(_s == "DIN912")
-    {
-        DIN912_bolt_hole(   descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-    else if (_s == "DIN7380-1")
-    {
-        DIN73801_bolt_hole( descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-    else if (_s == "DIN7991")
-    {
-        DIN7991_bolt_hole(  descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-}
+                    clearance=0.1, eps=DN_EPS, zet=undef, teardrop=false)
+    deez_nuts_fastener_hole(__dn_standard_record(standard, DN_BOLTS, "BOLT-HOLE"), descriptor,
+                            align=align, sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps,
+                            zet=zet, teardrop=teardrop, ctx="BOLT-HOLE");
 
 
-// bolt diameter functions
-__dn_bolt_diameter_functions = [["DIN84A",      function(x,y) DIN84A_get_head_diameter(x,y)],
-                                ["DIN933",      function(x,y) DIN933_get_head_diameter(x,y)],
-                                ["DIN912",      function(x,y) DIN912_get_head_diameter(x,y)],
-                                ["DIN7380-1",   function(x,y) DIN73801_get_head_diameter(x,y)],
-                                ["DIN7991",     function(x,y) DIN7991_get_head_diameter(x,y)]];
-
-// return head deameter
-// circumradius vs inradius
+// return head diameter (undef for an unknown standard or size)
 // - argument 'is_circumscribed' takes an effect only for the non-circular bolt heads
 //   '-> by default, the the circum-diameter is used, as it is expected that the ddiameter
 //       is used to drill a hole using cylinder + $fn=N combination
-// - undef for an unknown standard or size
 function get_bolt_head_diameter(descriptor, standard, is_circumscribed=true) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_bolt_diameter_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(descriptor, is_circumscribed);
+    let(r = deez_nuts_find_standard(standard, DN_BOLTS))
+    is_undef(r) ? undef : deez_nuts_fastener_head_diameter(r, descriptor, is_circumscribed);
 
 
-// bolt functions
-__dn_bolt_height_functions = [  ["DIN84A",      function(x) DIN84A_get_head_height(x)],
-                                ["DIN933",      function(x) DIN933_get_head_height(x)],
-                                ["DIN912",      function(x) DIN912_get_head_height(x)],
-                                ["DIN7380-1",   function(x) DIN73801_get_head_height(x)],
-                                ["DIN7991",     function(x) DIN7991_get_head_height(x)]];
-
-// return head height
-// - undef for an unknown standard or size
+// return head height (undef for an unknown standard or size)
 function get_bolt_head_height(descriptor, standard) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_bolt_height_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(descriptor);
+    let(r = deez_nuts_find_standard(standard, DN_BOLTS))
+    is_undef(r) ? undef : deez_nuts_fastener_head_height(r, descriptor);

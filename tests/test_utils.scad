@@ -53,11 +53,15 @@ _t_standards = [
     check("DIN73801",           deez_nuts_standard("DIN73801"),     "DIN7380-1"),
     check("ISO 7380-1",         deez_nuts_standard("ISO 7380-1"),   "DIN7380-1"),
     check("DIN 84 A",           deez_nuts_standard("DIN 84 A"),     "DIN84A"),
-    check("ISO10642",           deez_nuts_standard("ISO10642"),     "DIN7991"),
-    check("ISO4017",            deez_nuts_standard("ISO4017"),      "DIN933"),
-    check("ISO4032",            deez_nuts_standard("ISO4032"),      "DIN934"),
-    check("ISO10511",           deez_nuts_standard("ISO10511"),     "DIN985"),
-    check("ISO4035",            deez_nuts_standard("ISO4035"),      "DIN439"),
+    check("DIN 84",             deez_nuts_standard("DIN 84"),       "DIN84A"),
+    check("ISO 1207 own table", deez_nuts_standard("ISO 1207"),     "ISO1207"),
+    check("ISO 10642 own table", deez_nuts_standard("ISO10642"),    "ISO10642"),
+    check("ISO 4017 own table", deez_nuts_standard("ISO4017"),      "ISO4017"),
+    check("ISO 4032 own table", deez_nuts_standard("ISO4032"),      "ISO4032"),
+    check("ISO 10511 own table", deez_nuts_standard("ISO10511"),    "ISO10511"),
+    check("ISO 4035 own table", deez_nuts_standard("ISO4035"),      "ISO4035"),
+    check("DIN 439 B",          deez_nuts_standard("DIN439B"),      "DIN439"),
+    check("deprecated LUXPZ",   deez_nuts_standard("LUXPZ"),        "DIN7505"),
     check("unknown",            deez_nuts_standard("DIN999"),       undef),
     check("not a string",       deez_nuts_standard(912),            undef),
     check("every bolt standard is canonical",
@@ -66,8 +70,40 @@ _t_standards = [
           [for (s = DN_NUT_STANDARDS) deez_nuts_standard(s)], DN_NUT_STANDARDS),
     check("every screw standard is canonical",
           [for (s = DN_SCREW_STANDARDS) deez_nuts_standard(s)], DN_SCREW_STANDARDS),
+    check("names and aliases are unique",
+          let(n = [for (r = DN_STANDARDS) each concat([r[__DN_STD_NAME]], r[__DN_STD_ALIASES], r[__DN_STD_DEPRECATED])],
+              k = [for (x = n) deez_nuts_normalize_name(x)])
+          len([for (i = [0:1:len(k)-1]) for (j = [0:1:len(k)-1]) if (i < j && k[i] == k[j]) 1]), 0),
     check("aliases constants", [deez_nuts_standard(DN_BOLT_HEX), deez_nuts_standard(DN_SCREW_PHILLIP),
-                                deez_nuts_standard(DN_BOLT_BUTTON_HEAD)], ["DIN912", "LUXPZ", "DIN7380-1"]),
+                                deez_nuts_standard(DN_BOLT_BUTTON_HEAD)], ["DIN912", "DIN7505", "DIN7380-1"]),
+];
+
+// ------------------------------------------------------------------ tolerances and teardrops
+
+_t_tolerances = [
+    check("number",             deez_nuts_dimension(5),                                5),
+    check("nominal default",    deez_nuts_dimension([4, 5, 6]),                        5),
+    check("min",                deez_nuts_dimension([4, 5, 6], DN_TOLERANCE_MIN),      4),
+    check("max",                deez_nuts_dimension([4, 5, 6], DN_TOLERANCE_MAX),      6),
+    check("$dn_tolerance",      let($dn_tolerance = "max") deez_nuts_dimension([4, 5, 6]), 6),
+    check("dims with $dn_tolerance", let($dn_tolerance = "min") deez_nuts_standard_dims(DN_DIN912, 3)[0], 5.32),
+    check("dims nominal",       deez_nuts_standard_dims(DN_DIN912, 3), [5.5, 3, 2.5, 1.3]),
+    check("dims unknown size",  deez_nuts_standard_dims(DN_DIN912, 7), undef),
+];
+
+_t_teardrops = [
+    check("none",               [deez_nuts_teardrop_up(false, "x"), deez_nuts_teardrop_up(undef, "x")], [undef, undef]),
+    // zet="x": the local x is the parent -z, the local y is the parent y
+    check("zet x, true",        deez_nuts_teardrop_up(true, "x"),  "x"),
+    check("zet x, Z",           deez_nuts_teardrop_up("Z", "x"),   "x"),
+    check("zet x, z",           deez_nuts_teardrop_up("z", "x"),   "X"),
+    check("zet x, Y",           deez_nuts_teardrop_up("Y", "x"),   "Y"),
+    // zet="y": the local y is the parent -z, the local x is the parent x
+    check("zet y, true",        deez_nuts_teardrop_up(true, "y"),  "y"),
+    check("zet y, X",           deez_nuts_teardrop_up("X", "y"),   "X"),
+    // zet="z": a vertical hole printed lying
+    check("zet z, Y",           deez_nuts_teardrop_up("Y", "z"),   "Y"),
+    check("zet undef, x",       deez_nuts_teardrop_up("x", undef), "x"),
 ];
 
 // ------------------------------------------------------------------ tables, polygons, align

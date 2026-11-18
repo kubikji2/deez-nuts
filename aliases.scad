@@ -6,8 +6,8 @@ DN_NUT_NYLOCK = "DIN985";
 DN_NUT_THIN = "DIN439";
 
 // screws constants
-DN_SCREW_POZIDRIV = "LUXPZ";
-DN_SCREW_PHILLIP = DN_SCREW_POZIDRIV;   // kept for compatibility (LUX PZ is Pozidriv)
+DN_SCREW_POZIDRIV = "DIN7505";
+DN_SCREW_PHILLIP = DN_SCREW_POZIDRIV;   // kept for compatibility (the screws are Pozidriv)
 
 // bolts constants
 DN_BOLT_SLOTTED_HEAD = "DIN84A";

@@ -1,67 +1,23 @@
-include <../constants.scad>
-include <../utils.scad>
-include <../basic-bolt.scad>
-
-// DIN 7380-1 (ISO 7380-1): hexagon socket button head bolt; the length is the length of the shaft
-// TODO verify the values against the standard
-// dictionary to convert the shaft diameter to the head params
-DIN73801_DIC = [    [3.0,   [  5.7,  1.65]],
-                    [4.0,   [  7.6,  2.20]],
-                    [5.0,   [  9.5,  2.75]],
-                    [6.0,   [ 10.5,  3.30]]];
-//                              '     '-> head height
-//                              '-> head diameter
-
-// DIN7380-1 bolt
-// '-> argument 'descriptor' e.g. "M3x20" (the length of the shaft)
-// '-> argument 'align' DN_ALIGN_BOTTOM (default), DN_ALIGN_MIDDLE or DN_ALIGN_TOP
-// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
-module DIN73801_bolt(descriptor, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_descriptor_with_length(descriptor, "DEEZ-NUTS:DIN7380-1-bolt");
-    sd = _parsed_data[0];
-    sh = _parsed_data[1];
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(sd, DIN73801_DIC, "DIN7380-1-bolt", descriptor);
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false, zet=zet);
-}
-
-
-
-// DIN73801 bolt hole
-module DIN73801_bolt_hole(descriptor, align=DN_ALIGN_BOTTOM,
-                        sh_off=0, hh_off=0,
-                        clearance=0.1, eps=DN_EPS, zet=undef)
-{
-    // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_descriptor_with_length(descriptor, "DEEZ-NUTS:DIN7380-1-bolt-hole");
-    sd = _parsed_data[0];
-    sh = _parsed_data[1];
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(sd, DIN73801_DIC, "DIN7380-1-bolt-hole", descriptor);
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_bolt_hole(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false,
-                    sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps, zet=zet);
-
-}
-
-
-// DIN73801 get head diameter
-// NOTE: argument is_circumscribed is irrelevant for this cylindrical-headed bolt
-function DIN73801_get_head_diameter(descriptor, is_circumscribed) =
-    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN73801_DIC);
-
-
-// DIN73801 get head height
-function DIN73801_get_head_height(descriptor) =
-    basic_bolt_get_head_height(descriptor=descriptor, dic=DIN73801_DIC);
+// DIN EN ISO 7380-1: hexagon socket button head screw; the length is the length of the shaft
+// NOTE: included by deez-nuts.scad
+//
+// sources:
+// - DIN EN ISO 7380-1:2011 (M3 to M16): https://fasten.it/Norms/Norm/DIN_EN_ISO_7380-1
+// - M2.5 is not in ISO 7380-1; the values of a manufacturer (only the maxima, no socket depth):
+//   https://westfieldfasteners.co.uk/Standards/ScrewBolt-SHBtn-M.pdf
+DN_DIN7380_1 = dn_standard(
+    name = "DIN7380-1", kind = "bolt", shape = "button", length = "shaft",
+    aliases = ["ISO7380-1", "ISO7380", "DIN7380"],
+    sizes = [
+    //   d       dk (head diameter)        k (head height)        s (socket)  t (socket depth, min)
+        [ 2.5, [  4.50,                    1.50,                   1.5,        undef]],
+        [ 3.0, [[ 5.40,  5.70,  5.70],   [ 1.40,  1.65,  1.65],    2.0,        1.04]],
+        [ 4.0, [[ 7.24,  7.60,  7.60],   [ 1.95,  2.20,  2.20],    2.5,        1.30]],
+        [ 5.0, [[ 9.14,  9.50,  9.50],   [ 2.50,  2.75,  2.75],    3.0,        1.56]],
+        [ 6.0, [[10.07, 10.50, 10.50],   [ 3.00,  3.30,  3.30],    4.0,        2.08]],
+        [ 8.0, [[13.57, 14.00, 14.00],   [ 4.10,  4.40,  4.40],    5.0,        2.60]],
+        [10.0, [[17.07, 17.50, 17.50],   [ 5.20,  5.50,  5.50],    6.0,        3.12]],
+        [12.0, [[20.48, 21.00, 21.00],   [ 6.24,  6.60,  6.60],    8.0,        4.16]]
+    ],
+    source = ["https://fasten.it/Norms/Norm/DIN_EN_ISO_7380-1",
+              "https://westfieldfasteners.co.uk/Standards/ScrewBolt-SHBtn-M.pdf"]);

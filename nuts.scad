@@ -1,107 +1,48 @@
-// include constants for align values
-include<constants.scad>
+// nuts: the list of the implemented standards and the modules and functions for all of them
+// NOTE: included by deez-nuts.scad (after the records in nuts/)
 
-// include utils
-include<utils.scad>
+// the records of the implemented nut standards
+DN_NUTS = [DN_DIN934, DN_ISO4032, DN_DIN439, DN_ISO4035, DN_DIN985, DN_ISO10511, DN_DIN562];
 
-// include avaliable nuts
-include<nuts/DIN439-nut.scad>
-include<nuts/DIN562-nut.scad>
-include<nuts/DIN934-nut.scad>
-include<nuts/DIN985-nut.scad>
-
-// the implemented nut standards (canonical names; see deez_nuts_standard() for the aliases)
-DN_NUT_STANDARDS = ["DIN439", "DIN562", "DIN934", "DIN985"];
-
-// __private__ the canonical name of a nut standard, or an error listing the implemented ones
-function __dn_nut_standard(standard, ctx) =
-    let(s = deez_nuts_standard(standard))
-    assert(!is_undef(s) && len([for (b = DN_NUT_STANDARDS) if (b == s) b]) > 0,
-        str("[", ctx, "] standard: ", standard, " is not implemented! Available: ", DN_NUT_STANDARDS,
-            " (and their ISO names)"))
-    s;
+// the canonical names of the implemented nut standards
+DN_NUT_STANDARDS = [for (r = DN_NUTS) r[__DN_STD_NAME]];
 
 
-// parse avaliable nuts
+// a nut
 // '-> argument 'd' the size: a number (3) or a descriptor ("M3", or the bolt "M3x10")
-// '-> argument 'standard' e.g. "DIN934" or its ISO name "ISO4032" (spaces and dashes are ignored)
+// '-> argument 'standard' e.g. "DIN934" or "ISO 4032" (case, spaces and dashes are ignored)
+// '-> argument 'align' DN_ALIGN_BOTTOM (default), DN_ALIGN_MIDDLE or DN_ALIGN_TOP
+// '-> argument 'visual' adds the hole (and the insert of a nut with an insert)
 // '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
+// '-> the dimensions follow $dn_tolerance (DN_TOLERANCE_NOMINAL by default)
 module nut(d, standard, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    _s = __dn_nut_standard(standard, "NUT");
-    if (_s=="DIN439")
-    {
-        DIN439_nut(d=d, align=align, visual=visual, zet=zet);
-    }
-    else if (_s=="DIN562")
-    {
-        DIN562_nut(d=d, align=align, visual=visual, zet=zet);
-    }
-    else if (_s=="DIN934")
-    {
-        DIN934_nut(d=d, align=align, visual=visual, zet=zet);
-    }
-    else if (_s=="DIN985")
-    {
-        DIN985_nut(d=d, align=align, visual=visual, zet=zet);
-    }
-}
+    deez_nuts_nut(__dn_standard_record(standard, DN_NUTS, "NUT"), d,
+                  align=align, visual=visual, zet=zet, ctx="NUT");
 
 
-// parse avaliable nuts
+// a nut hole
+// '-> arguments as for nut(), and:
+// '-> argument 's_off' a side slot towards +x, to insert the nut from the side
+// '-> argument 'h_off' an access hole below the nut
+// '-> argument 'clearance' added on every side, across the flats (default 0.1)
+// '-> argument 'h_clearance' the clearance along the axis (default 'clearance')
+// '-> argument 'teardrop' false (default), true or the face letter of the up direction of the
+//     printing (across the axis): a corner of the hexagon points up (square nuts: no effect)
 module nut_hole(d, standard, align=DN_ALIGN_BOTTOM, s_off=0,
-                h_off=0, clearance=0.1, h_clearance=undef, zet=undef)
-{
-    _s = __dn_nut_standard(standard, "NUT-HOLE");
-    if (_s=="DIN439")
-    {
-        DIN439_nut_hole(d=d, align=align, s_off=s_off, h_off=h_off,
-                        clearance=clearance, h_clearance=h_clearance, zet=zet);
-    }
-    else if (_s=="DIN562")
-    {
-        DIN562_nut_hole(d=d, align=align, s_off=s_off, h_off=h_off,
-                        clearance=clearance, h_clearance=h_clearance, zet=zet);
-    }
-    else if (_s=="DIN934")
-    {
-        DIN934_nut_hole(d=d, align=align, s_off=s_off, h_off=h_off,
-                        clearance=clearance, h_clearance=h_clearance, zet=zet);
-    }
-    else if (_s=="DIN985")
-    {
-        DIN985_nut_hole(d=d, align=align, s_off=s_off, h_off=h_off,
-                        clearance=clearance, h_clearance=h_clearance, zet=zet);
-    }
-}
+                h_off=0, clearance=0.1, h_clearance=undef, zet=undef, teardrop=false)
+    deez_nuts_nut_hole(__dn_standard_record(standard, DN_NUTS, "NUT-HOLE"), d,
+                       align=align, s_off=s_off, h_off=h_off, clearance=clearance,
+                       h_clearance=h_clearance, zet=zet, teardrop=teardrop, ctx="NUT-HOLE");
 
 
-// nut diameter functions
-__dn_nut_diameter_functions = [ ["DIN439", function(x,y) DIN439_get_diameter(x,y)],
-                                ["DIN562", function(x,y) DIN562_get_diameter(x,y)],
-                                ["DIN934", function(x,y) DIN934_get_diameter(x,y)],
-                                ["DIN985", function(x,y) DIN985_get_diameter(x,y)]];
-
-// return nut diameter
+// return nut diameter (undef for an unknown standard or size)
 // - argument 'd' a number (3) or a descriptor ("M3", "M3x10")
-// - undef for an unknown standard or size
 function get_nut_diameter(d, standard, is_circumscribed=true) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_nut_diameter_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(d, is_circumscribed);
+    let(r = deez_nuts_find_standard(standard, DN_NUTS))
+    is_undef(r) ? undef : deez_nuts_nut_width(r, d, is_circumscribed);
 
 
-// nut height functions
-__dn_nut_height_functions = [   ["DIN439", function(d) DIN439_get_height(d)],
-                                ["DIN562", function(d) DIN562_get_height(d)],
-                                ["DIN934", function(d) DIN934_get_height(d)],
-                                ["DIN985", function(d) DIN985_get_height(d)]];
-
-// return nut height
-// - undef for an unknown standard or size
+// return nut height (undef for an unknown standard or size); the total height of a nut with an insert
 function get_nut_height(d, standard) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_nut_height_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(d);
+    let(r = deez_nuts_find_standard(standard, DN_NUTS))
+    is_undef(r) ? undef : deez_nuts_nut_height(r, d);

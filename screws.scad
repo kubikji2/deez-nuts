@@ -1,70 +1,37 @@
-// include constants for align values
-include<constants.scad>
+// screws: the list of the implemented standards and the modules and functions for all of them
+// NOTE: included by deez-nuts.scad (after the records in screws/)
 
-// include utils
-include<utils.scad>
+// the records of the implemented screw standards
+DN_SCREWS = [DN_DIN7505];
 
-// include all screws
-include<screws/LUXPZ-screw.scad>
-
-// the implemented screw standards (canonical names)
-DN_SCREW_STANDARDS = ["LUXPZ"];
-
-// __private__ the canonical name of a screw standard, or an error listing the implemented ones
-function __dn_screw_standard(standard, ctx) =
-    let(s = deez_nuts_standard(standard))
-    assert(!is_undef(s) && len([for (b = DN_SCREW_STANDARDS) if (b == s) b]) > 0,
-        str("[", ctx, "] standard: ", standard, " is not implemented! Available: ", DN_SCREW_STANDARDS))
-    s;
+// the canonical names of the implemented screw standards
+DN_SCREW_STANDARDS = [for (r = DN_SCREWS) r[__DN_STD_NAME]];
 
 
-// parse avaliable screws
-// '-> argument 'descriptor' e.g. "M3x16" (the total length)
-// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
+// a screw
+// '-> arguments as for bolt(); e.g. screw("M4x30", "DIN7505") (the total length)
 module screw(descriptor, standard, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    _s = __dn_screw_standard(standard, "SCREW");
-    if (_s=="LUXPZ")
-    {
-        LUXPZ_screw(descriptor=descriptor, align=align, visual=visual, zet=zet);
-    }
-}
+    deez_nuts_fastener(__dn_standard_record(standard, DN_SCREWS, "SCREW"), descriptor,
+                       align=align, visual=visual, zet=zet, ctx="SCREW");
 
 
-// parse avaliable screws
+// a hole for a screw
+// '-> arguments as for bolt_hole()
 module screw_hole(  descriptor, standard, align=DN_ALIGN_BOTTOM,
                     sh_off=0, hh_off=0,
-                    clearance=0.1, eps=DN_EPS, zet=undef)
-{
-    _s = __dn_screw_standard(standard, "SCREW-HOLE");
-    if (_s=="LUXPZ")
-    {
-        LUXPZ_screw_hole(   descriptor=descriptor, align=align,
-                            sh_off=sh_off, hh_off=hh_off,
-                            clearance=clearance, eps=eps, zet=zet);
-    }
-}
+                    clearance=0.1, eps=DN_EPS, zet=undef, teardrop=false)
+    deez_nuts_fastener_hole(__dn_standard_record(standard, DN_SCREWS, "SCREW-HOLE"), descriptor,
+                            align=align, sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps,
+                            zet=zet, teardrop=teardrop, ctx="SCREW-HOLE");
 
 
-// screw diameter functions
-__dn_screw_diameter_functions = [["LUXPZ",      function(x,y) LUXPZ_get_head_diameter(x,y)]];
-
-// return head deameter
-// - undef for an unknown standard or size
+// return head diameter (undef for an unknown standard or size)
 function get_screw_head_diameter(descriptor, standard, is_circumscribed=false) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_screw_diameter_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(descriptor, is_circumscribed);
+    let(r = deez_nuts_find_standard(standard, DN_SCREWS))
+    is_undef(r) ? undef : deez_nuts_fastener_head_diameter(r, descriptor, is_circumscribed);
 
 
-// screw functions
-__dn_screw_height_functions = [  ["LUXPZ", function(x) LUXPZ_get_head_height(x)]];
-
-// return head height
-// - undef for an unknown standard or size
+// return head height (undef for an unknown standard or size)
 function get_screw_head_height(descriptor, standard) =
-    let(fnc = deez_nuts_find_in_dic(key=deez_nuts_standard(standard), dic=__dn_screw_height_functions))
-    is_undef(fnc) ?
-        undef :
-        fnc(descriptor);
+    let(r = deez_nuts_find_standard(standard, DN_SCREWS))
+    is_undef(r) ? undef : deez_nuts_fastener_head_height(r, descriptor);

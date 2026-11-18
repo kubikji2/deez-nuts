@@ -1,4 +1,3 @@
-include <constants.scad>
 
 
 // return the translation for the particular align (the bolt is built from z = 0 upwards:
@@ -121,34 +120,57 @@ function deez_nuts_nut_diameter(d, ctx="DEEZ-NUTS") =
     is_num(d) ? d : deez_nuts_parse_descriptor(d)[0];
 
 
-// ---------------------------------------------------------------------------- standards
+// ---------------------------------------------------------------------------- tolerances
 
-// __private__ the aliases of the standards: the normalized name (upper case, without spaces,
-// dashes, dots and underscores) -> the canonical name of the implementation
-// NOTE: the ISO counterparts use the same data for now; where the standards differ (e.g. the
-//       across-flats of M10 and M12 hex heads and nuts), the ISO standard will get its own table
-__DN_STANDARD_ALIASES = [
-    // bolts
-    ["DIN84A",    "DIN84A"],    ["DIN84",     "DIN84A"],    ["ISO1207",   "DIN84A"],
-    ["DIN933",    "DIN933"],    ["ISO4017",   "DIN933"],
-    ["DIN912",    "DIN912"],    ["ISO4762",   "DIN912"],
-    ["DIN73801",  "DIN7380-1"], ["ISO73801",  "DIN7380-1"], ["ISO7380",   "DIN7380-1"],
-    ["DIN7991",   "DIN7991"],   ["ISO10642",  "DIN7991"],
-    // nuts
-    ["DIN934",    "DIN934"],    ["ISO4032",   "DIN934"],
-    ["DIN985",    "DIN985"],    ["ISO10511",  "DIN985"],
-    ["DIN439",    "DIN439"],    ["DIN439B",   "DIN439"],    ["ISO4035",   "DIN439"],
-    ["DIN562",    "DIN562"],
-    // screws
-    ["LUXPZ",     "LUXPZ"]
-];
+// the value of a dimension: a number (a single value), undef (not given by the standard), or a
+// range [min, nominal, max] from which
+// $dn_tolerance (DN_TOLERANCE_MIN, DN_TOLERANCE_NOMINAL (default) or DN_TOLERANCE_MAX) selects
+function deez_nuts_dimension(v, tolerance=undef) =
+    let(t = !is_undef(tolerance) ? tolerance : is_undef($dn_tolerance) ? DN_TOLERANCE_NOMINAL : $dn_tolerance)
+    assert(t == DN_TOLERANCE_MIN || t == DN_TOLERANCE_NOMINAL || t == DN_TOLERANCE_MAX,
+        str("[DEEZ-NUTS] $dn_tolerance must be \"min\", \"nominal\" or \"max\", got ", t))
+    is_num(v) || is_undef(v) ? v :
+    assert(is_list(v) && len(v) == 3, str("[DEEZ-NUTS] a dimension is a number or [min, nominal, max], got ", v))
+    t == DN_TOLERANCE_MIN ? v[0] : t == DN_TOLERANCE_MAX ? v[2] : v[1];
 
-// the canonical name of a standard, e.g. "iso 4762" -> "DIN912", "DIN73801" -> "DIN7380-1";
-// undef for an unknown standard
-function deez_nuts_standard(standard) =
-    is_string(standard) ?
-        deez_nuts_find_in_dic(key=__dn_strip(deez_nuts_upper(standard), " -._"), dic=__DN_STANDARD_ALIASES) :
-        undef;
+
+// ---------------------------------------------------------------------------- teardrops
+
+// __private__ the direction of a face letter (lower case: the negative side, as solidpp)
+function __dn_letter_vector(c) =
+    c == "x" ? [-1, 0, 0] : c == "X" ? [1, 0, 0] :
+    c == "y" ? [0, -1, 0] : c == "Y" ? [0, 1, 0] :
+    c == "z" ? [0, 0, -1] : c == "Z" ? [0, 0, 1] : undef;
+
+// __private__ the face letter of an axis direction
+function __dn_vector_letter(v) =
+    v[0] < -0.5 ? "x" : v[0] > 0.5 ? "X" :
+    v[1] < -0.5 ? "y" : v[1] > 0.5 ? "Y" :
+    v[2] < -0.5 ? "z" : "Z";
+
+// the 'up' letter of a teardrop in the frame of the part before its zet rotation (the hole
+// is built along z), from the argument 'teardrop' given in the frame of the call
+// '-> teardrop: false / undef (none), true (up is +Z, the hole must be horizontal), or the face
+//     letter the tip points to ("X", "y", ...), perpendicular to the axis of the hole
+// '-> returns undef (no teardrop) or the local letter ("x", "X", "y", "Y")
+function deez_nuts_teardrop_up(teardrop, zet, ctx="DEEZ-NUTS") =
+    is_undef(teardrop) || teardrop == false ?
+        undef :
+        let(
+            _zet = is_undef(zet) ? "z" : zet,
+            up = teardrop == true ? "Z" : teardrop,
+            v = __dn_letter_vector(up))
+        assert(!is_undef(v),
+            str("[", ctx, "] teardrop must be true, false or a face letter (\"x\", \"X\", \"y\", \"Y\", \"z\", \"Z\"), got ", teardrop))
+        let(
+            // the inverse of the zet rotation (transposed rotation matrices)
+            l = _zet == "x" || _zet == "X" ? [-v[2], v[1], v[0]] :
+                _zet == "y" || _zet == "Y" ? [v[0], -v[2], v[1]] :
+                v)
+        assert(abs(l[2]) < 0.5,
+            str("[", ctx, "] the teardrop must point across the hole: up=\"", up, "\" is along zet=\"", _zet, "\"",
+                teardrop == true ? "; for a vertical hole, give the up letter, e.g. teardrop=\"Y\"" : ""))
+        __dn_vector_letter(l);
 
 
 // ---------------------------------------------------------------------------- dictionaries

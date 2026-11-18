@@ -1,65 +1,23 @@
-include <../constants.scad>
-include <../utils.scad>
-include <../basic-bolt.scad>
-
-// DIN 84 A (ISO 1207): slotted cheese head bolt; the length is the length of the shaft
-// TODO verify the values against the standard
-// dictionary to convert the shaft diameter to the head params
-DIN84A_DIC = [  [2.0,   [ 3.8,  1.2]],
-                [3.0,   [ 5.4,  2.1]]];
-//                        '     '-> head height
-//                        '-> head diameter
-
-// DIN84A bolt
-// '-> argument 'descriptor' e.g. "M3x20" (the length of the shaft)
-// '-> argument 'align' DN_ALIGN_BOTTOM (default), DN_ALIGN_MIDDLE or DN_ALIGN_TOP
-// '-> argument 'zet' the axis: "z" (default), "x" or "y" (as solidpp)
-module DIN84A_bolt(descriptor, align=DN_ALIGN_BOTTOM, visual=false, zet=undef)
-{
-    // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_descriptor_with_length(descriptor, "DEEZ-NUTS:DIN84A-bolt");
-    sd = _parsed_data[0];
-    sh = _parsed_data[1];
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(sd, DIN84A_DIC, "DIN84A-bolt", descriptor);
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_bolt(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false, zet=zet);
-}
-
-
-
-// DIN84A bolt hole
-module DIN84A_bolt_hole(descriptor, align=DN_ALIGN_BOTTOM,
-                        sh_off=0, hh_off=0,
-                        clearance=0.1, eps=DN_EPS, zet=undef)
-{
-    // parse bolt descriptor
-    _parsed_data = deez_nuts_parse_descriptor_with_length(descriptor, "DEEZ-NUTS:DIN84A-bolt-hole");
-    sd = _parsed_data[0];
-    sh = _parsed_data[1];
-
-    // parserd dic data
-    _dic_data = __dn_table_entry(sd, DIN84A_DIC, "DIN84A-bolt-hole", descriptor);
-    hd = _dic_data[0];
-    hh = _dic_data[1];
-
-    // construct model
-    basic_bolt_hole(hh=hh, hd=hd, sd=sd, sh=sh, align=align, is_sloped=false,
-                    sh_off=sh_off, hh_off=hh_off, clearance=clearance, eps=eps, zet=zet);
-
-}
-
-
-// DIN84A get head diameter
-// NOTE: argument is_circumscribed is irrelevant for this cylindrical-headed bolt
-function DIN84A_get_head_diameter(descriptor, is_circumscribed) =
-    basic_bolt_get_head_diameter(descriptor=descriptor, dic=DIN84A_DIC);
-
-
-// DIN84A get head height
-function DIN84A_get_head_height(descriptor) =
-    basic_bolt_get_head_height(descriptor=descriptor, dic=DIN84A_DIC);
+// DIN 84 A: slotted cheese head screw; the length is the length of the shaft
+// NOTE: included by deez-nuts.scad
+// NOTE: ISO 1207 has taller heads for M2 and M2.5: see ISO1207-bolt.scad
+//
+// sources:
+// - DIN 84:1990 (withdrawn, M1 to M10): https://www.fasten.it/search/suppliers/3
+//   https://www.din-fasteners.ferrobend.com/din-standard-screws/din-84/ (slot width n)
+DN_DIN84A = dn_standard(
+    name = "DIN84A", kind = "bolt", shape = "cheese", length = "shaft",
+    aliases = ["DIN84"],
+    sizes = [
+    //   d       dk (head diameter)        k (head height)        n (slot)    t (slot depth, min)
+        [ 2.0, [[ 3.62,  3.80,  3.80],   [ 1.16,  1.30,  1.30],    0.5,        0.60]],
+        [ 2.5, [[ 4.32,  4.50,  4.50],   [ 1.46,  1.60,  1.60],    0.6,        0.70]],
+        [ 3.0, [[ 5.32,  5.50,  5.50],   [ 1.86,  2.00,  2.00],    0.8,        0.85]],
+        [ 4.0, [[ 6.78,  7.00,  7.00],   [ 2.46,  2.60,  2.60],    1.0,        1.10]],
+        [ 5.0, [[ 8.28,  8.50,  8.50],   [ 3.12,  3.30,  3.30],    1.2,        1.30]],
+        [ 6.0, [[ 9.78, 10.00, 10.00],   [ 3.60,  3.90,  3.90],    1.6,        1.60]],
+        [ 8.0, [[12.73, 13.00, 13.00],   [ 4.70,  5.00,  5.00],    2.0,        2.00]],
+        [10.0, [[15.73, 16.00, 16.00],   [ 5.70,  6.00,  6.00],    2.5,        2.40]]
+    ],
+    source = ["https://www.fasten.it/search/suppliers/3",
+              "https://www.din-fasteners.ferrobend.com/din-standard-screws/din-84/"]);
